@@ -1,0 +1,17 @@
+{
+    "name": "Basicdata",
+    "alias": "basicdata",
+    "database": "",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Basicdata\\Providers\\BasicdataServiceProvider"
+    ],
+    "files": [],
+    "menu": {
+        "main": [],
+        "master": [],
+        "system": []
+    }
+}
