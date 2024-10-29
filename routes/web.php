@@ -23,6 +23,19 @@
                 Route::get('export', [CurrencyController::class, 'export'])->name('export');
             });
 
+            Route::resource('mata-uang', CurrencyController::class, [
+                'names' => [
+                    'index'   => 'currency.index',
+                    'show'    => 'currency.show',
+                    'create'  => 'currency.create',
+                    'store'   => 'currency.store',
+                    'edit'    => 'currency.edit',
+                    'update'  => 'currency.update',
+                    'destroy' => 'currency.destroy',
+                ],
+            ]);
+
+
             Route::name('branch.')->prefix('cabang')->group(function () {
                 Route::get('restore/{id}', [BranchController::class, 'restore'])->name('restore');
                 Route::get('datatables', [BranchController::class, 'dataForDatatables'])->name('datatables');

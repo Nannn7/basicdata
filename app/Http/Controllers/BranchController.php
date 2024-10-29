@@ -6,9 +6,9 @@
     use Exception;
     use Illuminate\Http\Request;
     use Maatwebsite\Excel\Facades\Excel;
-    use Modules\Lpj\Exports\BranchExport;
-    use Modules\Lpj\Http\Requests\BranchRequest;
-    use Modules\Lpj\Models\Branch;
+    use Modules\Basicdata\Exports\BranchExport;
+    use Modules\Basicdata\Http\Requests\BranchRequest;
+    use Modules\Basicdata\Models\Branch;
 
     class BranchController extends Controller
     {

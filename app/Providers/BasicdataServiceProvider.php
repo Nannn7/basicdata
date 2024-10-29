@@ -25,6 +25,10 @@ class BasicdataServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+
+        if (class_exists('Breadcrumbs')) {
+            require __DIR__ . '/../../routes/breadcrumbs.php';
+        }
     }
 
     /**

@@ -6,9 +6,9 @@
     use Exception;
     use Illuminate\Http\Request;
     use Maatwebsite\Excel\Facades\Excel;
-    use Modules\Lpj\Exports\CurrencyExport;
-    use Modules\Lpj\Http\Requests\CurrencyRequest;
-    use Modules\Lpj\Models\Currency;
+    use Modules\Basicdata\Exports\CurrencyExport;
+    use Modules\Basicdata\Http\Requests\CurrencyRequest;
+    use Modules\Basicdata\Models\Currency;
 
     class CurrencyController extends Controller
     {
