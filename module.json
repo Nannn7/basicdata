@@ -11,7 +11,49 @@
     "files": [],
     "menu": {
         "main": [],
-        "master": [],
+        "master": [
+            {
+                "title": "Basic Data",
+                "path": "basicdata",
+                "icon": "ki-filled ki-category text-lg",
+                "classes": "",
+                "attributes": [],
+                "permission": "",
+                "roles": [
+                    "administrator",
+                    "pemohon-ao",
+                    "pemohon-eo",
+                    "admin",
+                    "surveyor"
+                ],
+                "sub": [
+                    {
+                        "title": "Cabang",
+                        "path": "basicdata.branch",
+                        "classes": "",
+                        "attributes": [],
+                        "permission": "",
+                        "roles": [
+                            "administrator",
+                            "pemohon-ao",
+                            "pemohon-eo"
+                        ]
+                    },
+                    {
+                        "title": "Mata Uang",
+                        "path": "basicdata.currency",
+                        "classes": "",
+                        "attributes": [],
+                        "permission": "",
+                        "roles": [
+                            "administrator",
+                            "pemohon-ao",
+                            "pemohon-eo"
+                        ]
+                    }
+                ]
+            }
+        ],
         "system": []
     }
 }
