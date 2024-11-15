@@ -38,3 +38,18 @@
         $trail->parent('basicdata.branch');
         $trail->push('Edit Cabang');
     });
+
+    Breadcrumbs::for('basicdata.holidaycalendar', function (BreadcrumbTrail $trail) {
+        $trail->parent('basicdata');
+        $trail->push('Holiday Calendar', route('basicdata.holidaycalendar.index'));
+    });
+
+    Breadcrumbs::for('basicdata.holidaycalendar.create', function (BreadcrumbTrail $trail) {
+        $trail->parent('basicdata.holidaycalendar');
+        $trail->push('Tambah Hari Libur', route('basicdata.holidaycalendar.create'));
+    });
+
+    Breadcrumbs::for('basicdata.holidaycalendar.edit', function (BreadcrumbTrail $trail) {
+        $trail->parent('basicdata.holidaycalendar');
+        $trail->push('Edit Hari Libur');
+    });

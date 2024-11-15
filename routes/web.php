@@ -3,6 +3,7 @@
     use Illuminate\Support\Facades\Route;
     use Modules\Basicdata\Http\Controllers\BranchController;
     use Modules\Basicdata\Http\Controllers\CurrencyController;
+    use Modules\Basicdata\Http\Controllers\HolidayCalendarController;
 
     /*
     |--------------------------------------------------------------------------
@@ -53,5 +54,16 @@
                     'destroy' => 'branch.destroy',
                 ],
             ]);
+
+            Route::group(['prefix' => 'holidaycalendar', 'as' => 'holidaycalendar.'], function () {
+                Route::get('/', [HolidayCalendarController::class, 'index'])->name('index');
+                Route::get('/create', [HolidayCalendarController::class, 'create'])->name('create');
+                Route::post('/', [HolidayCalendarController::class, 'store'])->name('store');
+                Route::get('/{id}/edit', [HolidayCalendarController::class, 'edit'])->name('edit');
+                Route::put('/{id}', [HolidayCalendarController::class, 'update'])->name('update');
+                Route::delete('/{id}', [HolidayCalendarController::class, 'destroy'])->name('destroy');
+                Route::get('/datatables', [HolidayCalendarController::class, 'dataForDatatables'])->name('datatables');
+                Route::get('/export', [HolidayCalendarController::class, 'export'])->name('export');
+            });
         });
     });
