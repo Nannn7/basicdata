@@ -12,17 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('holiday_calendars', function (Blueprint $table) {
-            Schema::create('holiday_calendars', function (Blueprint $table) {
-                $table->id();
-                $table->date('date');
-                $table->string('description');
-                $table->enum('type', ['national_holiday', 'collective_leave']);
-                $table->timestamps();
-                $table->softDeletes();
-                $table->unsignedBigInteger('created_by')->nullable();
-                $table->unsignedBigInteger('updated_by')->nullable();
-                $table->unsignedBigInteger('deleted_by')->nullable();
-            });
+            $table->id();
+            $table->date('date');
+            $table->string('description');
+            $table->enum('type', ['national_holiday', 'collective_leave']);
+            $table->timestamps();
+            $table->softDeletes();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
         });
     }
 
