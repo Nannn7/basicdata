@@ -50,6 +50,16 @@
                             "pemohon-ao",
                             "pemohon-eo"
                         ]
+                    },
+                    {
+                        "title": "Hari Libur",
+                        "path": "basicdata.holidaycalendar",
+                        "classes": "",
+                        "attributes": [],
+                        "permission": "",
+                        "roles": [
+                            "administrator"
+                        ]
                     }
                 ]
             }
