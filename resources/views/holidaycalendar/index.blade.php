@@ -136,7 +136,7 @@
                     title: 'Action',
                     render: (item, data) => {
                         return `<div class="flex flex-nowrap justify-center">
-                            <a class="btn btn-sm btn-icon btn-clear btn-info" href="basic-data/holiday-calendar/${data.id}/edit">
+                            <a class="btn btn-sm btn-icon btn-clear btn-info" href="basic-data/holidaycalendar/${data.id}/edit">
                                 <i class="ki-outline ki-notepad-edit"></i>
                             </a>
                             <a onclick="deleteData(${data.id})" class="delete btn btn-sm btn-icon btn-clear btn-danger">
