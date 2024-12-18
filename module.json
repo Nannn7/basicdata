@@ -21,10 +21,7 @@
                 "permission": "",
                 "roles": [
                     "administrator",
-                    "pemohon-ao",
-                    "pemohon-eo",
-                    "admin",
-                    "surveyor"
+                    "admin"
                 ],
                 "sub": [
                     {
@@ -35,8 +32,7 @@
                         "permission": "",
                         "roles": [
                             "administrator",
-                            "pemohon-ao",
-                            "pemohon-eo"
+                            "admin"
                         ]
                     },
                     {
@@ -47,8 +43,7 @@
                         "permission": "",
                         "roles": [
                             "administrator",
-                            "pemohon-ao",
-                            "pemohon-eo"
+                            "admin"
                         ]
                     },
                     {
@@ -58,7 +53,8 @@
                         "attributes": [],
                         "permission": "",
                         "roles": [
-                            "administrator"
+                            "administrator",
+                            "admin"
                         ]
                     }
                 ]
