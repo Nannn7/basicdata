@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="grid">
-        <div class="card card-grid min-w-full" data-datatable="false" data-datatable-page-size="5" data-datatable-state-save="false" id="branch-table" data-api-url="{{ route('basicdata.branch.datatables') }}">
+        <div class="card card-grid min-w-full" data-datatable="false" data-datatable-page-size="10" data-datatable-state-save="false" id="branch-table" data-api-url="{{ route('basicdata.branch.datatables') }}">
             <div class="card-header py-5 flex-wrap">
                 <h3 class="card-title">
                     Daftar Cabang
