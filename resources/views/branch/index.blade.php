@@ -21,6 +21,7 @@
                         <div class="h-[24px] border border-r-gray-200"></div>
                         <a class="btn btn-sm btn-light" href="{{ route('basicdata.branch.export') }}"> Export to Excel </a>
                         <a class="btn btn-sm btn-primary" href="{{ route('basicdata.branch.create') }}"> Tambah Cabang </a>
+                        <button class="btn btn-sm btn-danger hidden" id="deleteSelected" onclick="deleteSelectedRows()">Delete Selected</button>
                     </div>
                 </div>
             </div>
@@ -93,10 +94,52 @@
                 }
             })
         }
+
+        function deleteSelectedRows() {
+            const selectedCheckboxes = document.querySelectorAll('input[data-datatable-row-check="true"]:checked');
+            if (selectedCheckboxes.length === 0) {
+                Swal.fire('Warning', 'Please select at least one row to delete.', 'warning');
+                return;
+            }
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `You are about to delete ${selectedCheckboxes.length} selected row(s). This action cannot be undone!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete them!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const ids = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    });
+
+                    $.ajax('{{ route("basicdata.branch.deleteMultiple") }}', {
+                        type: 'POST',
+                        data: { ids: ids }
+                    }).then((response) => {
+                        Swal.fire('Deleted!', 'Selected rows have been deleted.', 'success').then(() => {
+                            window.location.reload();
+                        });
+                    }).catch((error) => {
+                        console.error('Error:', error);
+                        Swal.fire('Error!', 'An error occurred while deleting the rows.', 'error');
+                    });
+                }
+            })
+        }
     </script>
+
     <script type="module">
         const element = document.querySelector('#branch-table');
         const searchInput = document.getElementById('search');
+        const deleteSelectedButton = document.getElementById('deleteSelected');
 
         const apiUrl = element.getAttribute('data-api-url');
         const dataTableOptions = {
@@ -140,8 +183,34 @@
         searchInput.addEventListener('input', function () {
             const searchValue = this.value.trim();
             dataTable.search(searchValue, true);
-
         });
+
+        function updateDeleteButtonVisibility() {
+            const selectedCheckboxes = document.querySelectorAll('input[data-datatable-row-check="true"]:checked');
+            if (selectedCheckboxes.length > 0) {
+                deleteSelectedButton.classList.remove('hidden');
+            } else {
+                deleteSelectedButton.classList.add('hidden');
+            }
+        }
+
+        // Initial call to set button visibility
+        updateDeleteButtonVisibility();
+
+        // Add event listener to the table for checkbox changes
+        element.addEventListener('change', function(event) {
+            if (event.target.matches('input[data-datatable-row-check="true"]')) {
+                updateDeleteButtonVisibility();
+            }
+        });
+
+        // Add event listener for the "select all" checkbox
+        const selectAllCheckbox = element.querySelector('input[data-datatable-check="true"]');
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', updateDeleteButtonVisibility);
+        }
+
+        window.dataTable = dataTable;
     </script>
 @endpush
 

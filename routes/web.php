@@ -41,6 +41,7 @@
                 Route::get('restore/{id}', [BranchController::class, 'restore'])->name('restore');
                 Route::get('datatables', [BranchController::class, 'dataForDatatables'])->name('datatables');
                 Route::get('export', [BranchController::class, 'export'])->name('export');
+                Route::post('delete-multiple', [BranchController::class, 'deleteMultiple'])->name('deleteMultiple');
             });
 
             Route::resource('cabang', BranchController::class, [
