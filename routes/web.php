@@ -22,6 +22,7 @@
                 Route::get('restore/{id}', [CurrencyController::class, 'restore'])->name('restore');
                 Route::get('datatables', [CurrencyController::class, 'dataForDatatables'])->name('datatables');
                 Route::get('export', [CurrencyController::class, 'export'])->name('export');
+                Route::post('delete-multiple', [CurrencyController::class, 'deleteMultiple'])->name('deleteMultiple');
             });
 
             Route::resource('mata-uang', CurrencyController::class, [
