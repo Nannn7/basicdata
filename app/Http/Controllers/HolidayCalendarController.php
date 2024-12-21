@@ -88,6 +88,13 @@
             }
         }
 
+        public function deleteMultiple(Request $request)
+        {
+            $ids = $request->input('ids');
+            HolidayCalendar::whereIn('id', $ids)->delete();
+            return response()->json(['message' => 'Holidays deleted successfully']);
+        }
+
         public function dataForDatatables(Request $request)
         {
             if (is_null($this->user) || !$this->user->can('currency.view')) {

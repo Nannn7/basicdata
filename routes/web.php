@@ -66,6 +66,7 @@
                 Route::delete('/{id}', [HolidayCalendarController::class, 'destroy'])->name('destroy');
                 Route::get('/datatables', [HolidayCalendarController::class, 'dataForDatatables'])->name('datatables');
                 Route::get('/export', [HolidayCalendarController::class, 'export'])->name('export');
+                Route::post('delete-multiple', [HolidayCalendarController::class, 'deleteMultiple'])->name('deleteMultiple');
             });
         });
     });
