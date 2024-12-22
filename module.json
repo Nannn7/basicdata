@@ -15,7 +15,7 @@
             {
                 "title": "Basic Data",
                 "path": "basicdata",
-                "icon": "ki-filled ki-category text-lg",
+                "icon": "ki-filled ki-category text-lg text-primary",
                 "classes": "",
                 "attributes": [],
                 "permission": "",
