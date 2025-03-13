@@ -3,6 +3,7 @@
     namespace Modules\Basicdata\Http\Requests;
 
     use Illuminate\Foundation\Http\FormRequest;
+    use Illuminate\Validation\Rule;
 
     class BranchRequest extends FormRequest
     {
@@ -21,9 +22,23 @@
             ];
 
             if ($this->method() == 'PUT') {
-                $rules['code'] = 'required|string|max:3|unique:branches,code,' . $this->id;
+                $rules['code'] = [
+                    'required',
+                    'string',
+                    'max:10',
+                    Rule::unique('branches')->ignore($this->id)->where(function ($query) {
+                        return $query->whereNull('deleted_at');
+                    }),
+                ];
             } else {
-                $rules['code'] = 'required|string|max:3|unique:branches,code';
+                $rules['code'] = [
+                    'required',
+                    'string',
+                    'max:10',
+                    Rule::unique('branches')->where(function ($query) {
+                        return $query->whereNull('deleted_at');
+                    }),
+                ];
             }
 
             return $rules;
