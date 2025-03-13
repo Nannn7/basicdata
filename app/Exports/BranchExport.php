@@ -6,7 +6,7 @@
     use Maatwebsite\Excel\Concerns\WithColumnFormatting;
     use Maatwebsite\Excel\Concerns\WithHeadings;
     use Maatwebsite\Excel\Concerns\WithMapping;
-    use Modules\Lpj\Models\Branch;
+    use Modules\Basicdata\Models\Branch;
     use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
     class BranchExport implements WithColumnFormatting, WithHeadings, FromCollection, withMapping
