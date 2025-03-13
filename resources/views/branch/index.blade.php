@@ -84,7 +84,7 @@
                     $.ajax(`basic-data/cabang/${data}`, {
                         type: 'DELETE'
                     }).then((response) => {
-                        swal.fire('Deleted!', 'User has been deleted.', 'success').then(() => {
+                        swal.fire('Deleted!', 'Branch has been deleted.', 'success').then(() => {
                             window.location.reload();
                         });
                     }).catch((error) => {
