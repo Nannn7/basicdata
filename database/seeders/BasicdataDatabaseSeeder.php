@@ -11,6 +11,10 @@ class BasicdataDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $this->call([
+            BranchesSeeder::class,
+            CurrencySeeder::class,
+            HolidayCalendarSeeder::class
+        ]);
     }
 }
