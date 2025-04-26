@@ -14,6 +14,7 @@
         {
             $rules = [
                 'name'              => 'required|string|max:255',
+                'symbol'            => 'required|string|max:10',
                 'decimal_places'    => 'nullable|integer|between:0,3',
                 'status'            => 'nullable|boolean',
                 'authorized_at'     => 'nullable|datetime',

@@ -48,6 +48,17 @@
                                 </div>
                                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                                     <label class="form-label max-w-56">
+                                        Symbol
+                                    </label>
+                                    <div class="flex flex-wrap items-baseline w-full">
+                                        <input class="input @error('symbol') border-danger bg-danger-light @enderror" type="text" name="symbol" value="{{ $currency->symbol ?? '' }}">
+                                        @error('symbol')
+                                        <em class="alert text-danger text-sm">{{ $message }}</em>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label max-w-56">
                                         Decimal Places
                                     </label>
                                     <div class="flex flex-wrap items-baseline w-full">

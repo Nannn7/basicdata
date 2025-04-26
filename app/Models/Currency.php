@@ -9,6 +9,7 @@
         protected $fillable = [
             'code',
             'name',
+            'symbol',
             'decimal_places',
             'status',
             'authorized_at',

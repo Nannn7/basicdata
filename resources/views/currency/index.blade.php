@@ -41,6 +41,10 @@
                                 <span class="sort"> <span class="sort-label"> Mata Uang </span>
                                     <span class="sort-icon"> </span> </span>
                             </th>
+                            <th class="min-w-[150px]" data-datatable-column="symbol">
+                                <span class="sort"> <span class="sort-label"> Symbol </span>
+                                    <span class="sort-icon"> </span> </span>
+                            </th>
                             <th class="min-w-[50px]" data-datatable-column="decimal_places">
                                 <span class="sort"> <span class="sort-label"> Decimal Places </span>
                                     <span class="sort-icon"> </span> </span>
@@ -126,7 +130,7 @@
 
                     $.ajax('{{ route("basicdata.currency.deleteMultiple") }}', {
                         type: 'POST',
-                        data: { ids: ids }
+                        data: {ids: ids}
                     }).then((response) => {
                         Swal.fire('Deleted!', 'Selected rows have been deleted.', 'success').then(() => {
                             window.location.reload();
@@ -164,6 +168,9 @@
                 },
                 name: {
                     title: 'Mata Uang',
+                },
+                symbol: {
+                    title: 'Symbol',
                 },
                 decimal_places: {
                     title: 'Decimal Places',
@@ -204,7 +211,7 @@
         updateDeleteButtonVisibility();
 
         // Add event listener to the table for checkbox changes
-        element.addEventListener('change', function(event) {
+        element.addEventListener('change', function (event) {
             if (event.target.matches('input[data-datatable-row-check="true"]')) {
                 updateDeleteButtonVisibility();
             }

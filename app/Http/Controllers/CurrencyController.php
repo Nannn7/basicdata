@@ -103,6 +103,7 @@
                 $search = $request->get('search');
                 $query->where(function ($q) use ($search) {
                     $q->where('code', 'LIKE', "%$search%");
+                    $q->orWhere('symbol', 'LIKE', "%$search%");
                     $q->orWhere('name', 'LIKE', "%$search%");
                 });
             }

@@ -15,6 +15,7 @@
                 $table->id();
                 $table->string('code', 3)->unique();
                 $table->string('name');
+                $table->string('symbol')->nullable();
                 $table->integer('decimal_places')->default(2);
                 $table->boolean('status')->default(true)->nullable();
                 $table->timestamps();
