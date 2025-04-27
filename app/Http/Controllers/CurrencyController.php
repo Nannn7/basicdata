@@ -134,10 +134,10 @@
             $data = $query->get();
 
             // Calculate the page count
-            $pageCount = ceil($totalRecords / $request->get('size'));
+            $pageCount = ceil($filteredRecords / ($request->get('size') ?: 1));
 
             // Calculate the current page number
-            $currentPage = 0 + 1;
+            $currentPage = $request->get('page') ?: 1;
 
             // Return the response data as a JSON object
             return response()->json([

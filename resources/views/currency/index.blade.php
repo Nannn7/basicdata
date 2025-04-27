@@ -193,8 +193,9 @@
 
         let dataTable = new KTDataTable(element, dataTableOptions);
         // Custom search functionality
-        searchInput.addEventListener('input', function () {
+        searchInput.addEventListener('change', function () {
             const searchValue = this.value.trim();
+            dataTable.goPage(1);
             dataTable.search(searchValue, true);
         });
 
