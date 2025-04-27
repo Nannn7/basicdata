@@ -8,7 +8,9 @@
     "providers": [
         "Modules\\Basicdata\\Providers\\BasicdataServiceProvider"
     ],
-    "files": [],
+    "files": [
+        "app/Helpers/Currency.php"
+    ],
     "menu": {
         "main": [],
         "master": [
