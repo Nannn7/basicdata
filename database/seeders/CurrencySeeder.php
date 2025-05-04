@@ -37,7 +37,7 @@
                 ['code' => 'INR', 'name' => 'Indian Rupee', 'symbol' => '₹', 'decimal_places' => 2, 'status' => true, 'created_at' => $now, 'updated_at' => $now],
                 ['code' => 'BRL', 'name' => 'Brazilian Real', 'symbol' => 'R$', 'decimal_places' => 2, 'status' => true, 'created_at' => $now, 'updated_at' => $now],
                 ['code' => 'ZAR', 'name' => 'South African Rand', 'symbol' => 'R', 'decimal_places' => 2, 'status' => true, 'created_at' => $now, 'updated_at' => $now],
-                ['code' => 'IDR', 'name' => 'Indonesian Rupiah', 'symbol' => 'Rp', 'decimal_places' => 0, 'status' => true, 'created_at' => $now, 'updated_at' => $now],
+                ['code' => 'IDR', 'name' => 'Indonesian Rupiah', 'symbol' => 'Rp', 'decimal_places' => 2, 'status' => true, 'created_at' => $now, 'updated_at' => $now],
                 ['code' => 'MYR', 'name' => 'Malaysian Ringgit', 'symbol' => 'RM', 'decimal_places' => 2, 'status' => true, 'created_at' => $now, 'updated_at' => $now],
                 ['code' => 'PHP', 'name' => 'Philippine Peso', 'symbol' => '₱', 'decimal_places' => 2, 'status' => true, 'created_at' => $now, 'updated_at' => $now],
                 ['code' => 'THB', 'name' => 'Thai Baht', 'symbol' => '฿', 'decimal_places' => 2, 'status' => true, 'created_at' => $now, 'updated_at' => $now],
@@ -59,6 +59,7 @@
                 ['code' => 'PKR', 'name' => 'Pakistani Rupee', 'symbol' => '₨', 'decimal_places' => 2, 'status' => true, 'created_at' => $now, 'updated_at' => $now],
             ];
 
+            DB::table('currencies')->truncate();
             DB::table('currencies')->insert($currencies);
         }
     }

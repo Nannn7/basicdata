@@ -9,7 +9,8 @@
         "Modules\\Basicdata\\Providers\\BasicdataServiceProvider"
     ],
     "files": [
-        "app/Helpers/Currency.php"
+        "app/Helpers/Currency.php",
+        "app/Helpers/HolidayCalendar.php"
     ],
     "menu": {
         "main": [],
