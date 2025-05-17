@@ -6,7 +6,7 @@
     use Maatwebsite\Excel\Concerns\WithColumnFormatting;
     use Maatwebsite\Excel\Concerns\WithHeadings;
     use Maatwebsite\Excel\Concerns\WithMapping;
-    use Modules\Lpj\Models\Currency;
+    use Modules\Basicdata\Models\Currency;
     use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
     class CurrencyExport implements WithColumnFormatting, WithHeadings, FromCollection, withMapping

@@ -12,15 +12,35 @@
 
     class CurrencyController extends Controller
     {
-        public $user;
+        /**
+         * Get the authenticated user.
+         *
+         * @return \Illuminate\Contracts\Auth\Authenticatable|null
+         */
+        protected function getUser()
+        {
+            return \Illuminate\Support\Facades\Auth::guard('web')->user();
+        }
 
         public function index()
         {
+            // Check if the authenticated user has the required permission to view currencies
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.read')) {
+                abort(403, 'Sorry! You are not allowed to view currencies.');
+            }
+
             return view('basicdata::currency.index');
         }
 
         public function store(CurrencyRequest $request)
         {
+            // Check if the authenticated user has the required permission to create currencies
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.create')) {
+                abort(403, 'Sorry! You are not allowed to create currencies.');
+            }
+
             $validate = $request->validated();
 
             if ($validate) {
@@ -40,17 +60,35 @@
 
         public function create()
         {
+            // Check if the authenticated user has the required permission to create currencies
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.create')) {
+                abort(403, 'Sorry! You are not allowed to create currencies.');
+            }
+
             return view('basicdata::currency.create');
         }
 
         public function edit($id)
         {
+            // Check if the authenticated user has the required permission to update currencies
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.update')) {
+                abort(403, 'Sorry! You are not allowed to update currencies.');
+            }
+
             $currency = Currency::find($id);
             return view('basicdata::currency.create', compact('currency'));
         }
 
         public function update(CurrencyRequest $request, $id)
         {
+            // Check if the authenticated user has the required permission to update currencies
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.update')) {
+                abort(403, 'Sorry! You are not allowed to update currencies.');
+            }
+
             $validate = $request->validated();
 
             if ($validate) {
@@ -71,28 +109,42 @@
 
         public function destroy($id)
         {
+            // Check if the authenticated user has the required permission to delete currencies
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.delete')) {
+                return response()->json(['success' => false, 'message' => 'Sorry! You are not allowed to delete currencies.'], 403);
+            }
+
             try {
                 // Delete from database
                 $currency = Currency::find($id);
                 $currency->delete();
 
-                echo json_encode(['success' => true, 'message' => 'Currency deleted successfully']);
+                return response()->json(['success' => true, 'message' => 'Currency deleted successfully']);
             } catch (Exception $e) {
-                echo json_encode(['success' => false, 'message' => 'Failed to delete currency']);
+                return response()->json(['success' => false, 'message' => 'Failed to delete currency']);
             }
         }
 
         public function deleteMultiple(Request $request)
         {
+            // Check if the authenticated user has the required permission to delete currencies
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.delete')) {
+                return response()->json(['success' => false, 'message' => 'Sorry! You are not allowed to delete currencies.'], 403);
+            }
+
             $ids = $request->input('ids');
             Currency::whereIn('id', $ids)->delete();
-            return response()->json(['message' => 'Currencies deleted successfully']);
+            return response()->json(['success' => true, 'message' => 'Currencies deleted successfully']);
         }
 
         public function dataForDatatables(Request $request)
         {
-            if (is_null($this->user) || !$this->user->can('currency.view')) {
-                //abort(403, 'Sorry! You are not allowed to view users.');
+            // Check if the authenticated user has the required permission to view currencies
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.read')) {
+                return response()->json(['success' => false, 'message' => 'Sorry! You are not allowed to view currencies.'], 403);
             }
 
             // Retrieve data from the database
@@ -153,6 +205,12 @@
 
         public function export()
         {
+            // Check if the authenticated user has the required permission to export currencies
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.export')) {
+                abort(403, 'Sorry! You are not allowed to export currencies.');
+            }
+
             return Excel::download(new CurrencyExport, 'currency.xlsx');
         }
     }

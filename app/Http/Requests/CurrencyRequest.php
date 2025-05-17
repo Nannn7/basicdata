@@ -23,7 +23,8 @@
             ];
 
             if ($this->method() == 'PUT') {
-                $rules['code'] = 'required|string|max:3|unique:currencies,code,' . $this->id;
+                $id = $this->id ? (int)$this->id : null;
+                $rules['code'] = 'required|string|max:3|unique:currencies,code,' . $id;
             } else {
                 $rules['code'] = 'required|string|max:3|unique:currencies,code';
             }
@@ -37,6 +38,14 @@
         public function authorize()
         : bool
         {
+            $user = auth()->guard('web')->user();
+
+            if ($this->method() == 'PUT') {
+                return $user && $user->can('basic-data.update');
+            } elseif ($this->method() == 'POST') {
+                return $user && $user->can('basic-data.create');
+            }
+
             return true;
         }
     }
