@@ -12,15 +12,35 @@
 
     class HolidayCalendarController extends Controller
     {
-        public $user;
+        /**
+         * Get the authenticated user.
+         *
+         * @return \Illuminate\Contracts\Auth\Authenticatable|null
+         */
+        protected function getUser()
+        {
+            return \Illuminate\Support\Facades\Auth::guard('web')->user();
+        }
 
         public function index()
         {
+            // Check if the authenticated user has the required permission to view holiday calendars
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.read')) {
+                abort(403, 'Sorry! You are not allowed to view holiday calendars.');
+            }
+
             return view('basicdata::holidaycalendar.index');
         }
 
         public function store(HolidayCalendarRequest $request)
         {
+            // Check if the authenticated user has the required permission to create holiday calendars
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.create')) {
+                abort(403, 'Sorry! You are not allowed to create holiday calendars.');
+            }
+
             $validate = $request->validated();
 
             if ($validate) {
@@ -40,17 +60,35 @@
 
         public function create()
         {
+            // Check if the authenticated user has the required permission to create holiday calendars
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.create')) {
+                abort(403, 'Sorry! You are not allowed to create holiday calendars.');
+            }
+
             return view('basicdata::holidaycalendar.create');
         }
 
         public function edit($id)
         {
+            // Check if the authenticated user has the required permission to update holiday calendars
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.update')) {
+                abort(403, 'Sorry! You are not allowed to update holiday calendars.');
+            }
+
             $holiday = HolidayCalendar::find($id);
             return view('basicdata::holidaycalendar.create', compact('holiday'));
         }
 
         public function update(HolidayCalendarRequest $request, $id)
         {
+            // Check if the authenticated user has the required permission to update holiday calendars
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.update')) {
+                abort(403, 'Sorry! You are not allowed to update holiday calendars.');
+            }
+
             $validate = $request->validated();
 
             if ($validate) {
@@ -74,6 +112,12 @@
 
         public function destroy($id)
         {
+            // Check if the authenticated user has the required permission to delete holiday calendars
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.delete')) {
+                abort(403, 'Sorry! You are not allowed to delete holiday calendars.');
+            }
+
             try {
                 $holiday = HolidayCalendar::find($id);
                 $holiday->delete();
@@ -90,15 +134,23 @@
 
         public function deleteMultiple(Request $request)
         {
+            // Check if the authenticated user has the required permission to delete holiday calendars
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.delete')) {
+                return response()->json(['success' => false, 'message' => 'Sorry! You are not allowed to delete holiday calendars.'], 403);
+            }
+
             $ids = $request->input('ids');
             HolidayCalendar::whereIn('id', $ids)->delete();
-            return response()->json(['message' => 'Holidays deleted successfully']);
+            return response()->json(['success' => true, 'message' => 'Holidays deleted successfully']);
         }
 
         public function dataForDatatables(Request $request)
         {
-            if (is_null($this->user) || !$this->user->can('currency.view')) {
-                //abort(403, 'Sorry! You are not allowed to view users.');
+            // Check if the authenticated user has the required permission to view holiday calendars
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.read')) {
+                return response()->json(['success' => false, 'message' => 'Sorry! You are not allowed to view holiday calendars.'], 403);
             }
 
             // Retrieve data from the database
@@ -159,6 +211,12 @@
 
         public function export()
         {
+            // Check if the authenticated user has the required permission to export holiday calendars
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.export')) {
+                abort(403, 'Sorry! You are not allowed to export holiday calendars.');
+            }
+
             return Excel::download(new HolidayCalendarExport, 'holiday_calendar.xlsx');
         }
     }

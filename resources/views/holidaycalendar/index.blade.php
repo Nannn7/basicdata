@@ -19,9 +19,15 @@
                     </div>
                     <div class="flex flex-wrap gap-2.5">
                         <div class="h-[24px] border border-r-gray-200"></div>
+                        @can('basic-data.export')
                         <a class="btn btn-sm btn-light" href="{{ route('basicdata.holidaycalendar.export') }}"> Export to Excel </a>
+                        @endcan
+                        @can('basic-data.create')
                         <a class="btn btn-sm btn-primary" href="{{ route('basicdata.holidaycalendar.create') }}"> Tambah Hari Libur </a>
+                        @endcan
+                        @can('basic-data.delete')
                         <button class="btn btn-sm btn-danger hidden" id="deleteSelected" onclick="deleteSelectedRows()">Delete Selected</button>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -177,14 +183,22 @@
                 actions: {
                     title: 'Action',
                     render: (item, data) => {
-                        return `<div class="flex flex-nowrap justify-center">
-                            <a class="btn btn-sm btn-icon btn-clear btn-info" href="basic-data/holidaycalendar/${data.id}/edit">
+                        let html = `<div class="flex flex-nowrap justify-center">`;
+
+                        @can('basic-data.update')
+                        html += `<a class="btn btn-sm btn-icon btn-clear btn-info" href="basic-data/holidaycalendar/${data.id}/edit">
                                 <i class="ki-outline ki-notepad-edit"></i>
-                            </a>
-                            <a onclick="deleteData(${data.id})" class="delete btn btn-sm btn-icon btn-clear btn-danger">
+                            </a>`;
+                        @endcan
+
+                        @can('basic-data.delete')
+                        html += `<a onclick="deleteData(${data.id})" class="delete btn btn-sm btn-icon btn-clear btn-danger">
                                 <i class="ki-outline ki-trash"></i>
-                            </a>
-                        </div>`;
+                            </a>`;
+                        @endcan
+
+                        html += `</div>`;
+                        return html;
                     },
                 }
             },

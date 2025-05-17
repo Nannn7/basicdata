@@ -6,7 +6,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Modules\Basicdata\Entities\HolidayCalendar;
+use Modules\Basicdata\Models\HolidayCalendar;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class HolidayCalendarExport implements WithColumnFormatting, WithHeadings, FromCollection, WithMapping
