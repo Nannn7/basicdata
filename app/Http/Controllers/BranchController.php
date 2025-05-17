@@ -12,21 +12,16 @@
 
     class BranchController extends Controller
     {
-        /**
-         * Get the authenticated user.
-         *
-         * @return \Illuminate\Contracts\Auth\Authenticatable|null
-         */
-        protected function getUser()
-        {
-            return \Illuminate\Support\Facades\Auth::guard('web')->user();
+        protected $user;
+
+        public function __construct(){
+            $this->user = auth()->user();
         }
 
         public function index()
         {
             // Check if the authenticated user has the required permission to view branches
-            $user = $this->getUser();
-            if (is_null($user) || !$user->can('basic-data.read')) {
+            if (is_null($this->user) || !$this->user->can('basic-data.read')) {
                 abort(403, 'Sorry! You are not allowed to view branches.');
             }
 
@@ -36,8 +31,7 @@
         public function store(BranchRequest $request)
         {
             // Check if the authenticated user has the required permission to create branches
-            $user = $this->getUser();
-            if (is_null($user) || !$user->can('basic-data.create')) {
+            if (is_null($this->user) || !$this->user->can('basic-data.create')) {
                 abort(403, 'Sorry! You are not allowed to create branches.');
             }
 
@@ -61,8 +55,7 @@
         public function create()
         {
             // Check if the authenticated user has the required permission to create branches
-            $user = $this->getUser();
-            if (is_null($user) || !$user->can('basic-data.create')) {
+            if (is_null($this->user) || !$this->user->can('basic-data.create')) {
                 abort(403, 'Sorry! You are not allowed to create branches.');
             }
 
@@ -72,8 +65,7 @@
         public function edit($id)
         {
             // Check if the authenticated user has the required permission to update branches
-            $user = $this->getUser();
-            if (is_null($user) || !$user->can('basic-data.update')) {
+            if (is_null($this->user) || !$this->user->can('basic-data.update')) {
                 abort(403, 'Sorry! You are not allowed to update branches.');
             }
 
@@ -84,8 +76,7 @@
         public function update(BranchRequest $request, $id)
         {
             // Check if the authenticated user has the required permission to update branches
-            $user = $this->getUser();
-            if (is_null($user) || !$user->can('basic-data.update')) {
+            if (is_null($this->user) || !$this->user->can('basic-data.update')) {
                 abort(403, 'Sorry! You are not allowed to update branches.');
             }
 
@@ -110,8 +101,7 @@
         public function destroy($id)
         {
             // Check if the authenticated user has the required permission to delete branches
-            $user = $this->getUser();
-            if (is_null($user) || !$user->can('basic-data.delete')) {
+            if (is_null($this->user) || !$this->user->can('basic-data.delete')) {
                 return response()->json(['success' => false, 'message' => 'Sorry! You are not allowed to delete branches.'], 403);
             }
 
@@ -129,8 +119,7 @@
         public function deleteMultiple(Request $request)
         {
             // Check if the authenticated user has the required permission to delete branches
-            $user = $this->getUser();
-            if (is_null($user) || !$user->can('basic-data.delete')) {
+            if (is_null($this->user) || !$this->user->can('basic-data.delete')) {
                 return response()->json(['success' => false, 'message' => 'Sorry! You are not allowed to delete branches.'], 403);
             }
 
@@ -142,8 +131,7 @@
         public function dataForDatatables(Request $request)
         {
             // Check if the authenticated user has the required permission to view branches
-            $user = $this->getUser();
-            if (is_null($user) || !$user->can('basic-data.read')) {
+            if (is_null($this->user) || !$this->user->can('basic-data.read')) {
                 return response()->json(['success' => false, 'message' => 'Sorry! You are not allowed to view branches.'], 403);
             }
 
@@ -205,8 +193,7 @@
         public function export()
         {
             // Check if the authenticated user has the required permission to export branches
-            $user = $this->getUser();
-            if (is_null($user) || !$user->can('basic-data.export')) {
+            if (is_null($this->user) || !$this->user->can('basic-data.export')) {
                 abort(403, 'Sorry! You are not allowed to export branches.');
             }
 

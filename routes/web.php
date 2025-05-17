@@ -19,7 +19,6 @@
     Route::middleware(['auth'])->group(function () {
         Route::name('basicdata.')->prefix('basic-data')->group(function () {
             Route::name('currency.')->prefix('mata-uang')->group(function () {
-                Route::get('restore/{id}', [CurrencyController::class, 'restore'])->name('restore');
                 Route::get('datatables', [CurrencyController::class, 'dataForDatatables'])->name('datatables');
                 Route::get('export', [CurrencyController::class, 'export'])->name('export');
                 Route::post('delete-multiple', [CurrencyController::class, 'deleteMultiple'])->name('deleteMultiple');
@@ -39,7 +38,6 @@
 
 
             Route::name('branch.')->prefix('cabang')->group(function () {
-                Route::get('restore/{id}', [BranchController::class, 'restore'])->name('restore');
                 Route::get('datatables', [BranchController::class, 'dataForDatatables'])->name('datatables');
                 Route::get('export', [BranchController::class, 'export'])->name('export');
                 Route::post('delete-multiple', [BranchController::class, 'deleteMultiple'])->name('deleteMultiple');
@@ -58,15 +56,10 @@
             ]);
 
             Route::group(['prefix' => 'holidaycalendar', 'as' => 'holidaycalendar.'], function () {
-                Route::get('/', [HolidayCalendarController::class, 'index'])->name('index');
-                Route::get('/create', [HolidayCalendarController::class, 'create'])->name('create');
-                Route::post('/', [HolidayCalendarController::class, 'store'])->name('store');
-                Route::get('/{id}/edit', [HolidayCalendarController::class, 'edit'])->name('edit');
-                Route::put('/{id}', [HolidayCalendarController::class, 'update'])->name('update');
-                Route::delete('/{id}', [HolidayCalendarController::class, 'destroy'])->name('destroy');
                 Route::get('/datatables', [HolidayCalendarController::class, 'dataForDatatables'])->name('datatables');
                 Route::get('/export', [HolidayCalendarController::class, 'export'])->name('export');
                 Route::post('delete-multiple', [HolidayCalendarController::class, 'deleteMultiple'])->name('deleteMultiple');
             });
+            Route::resource('holidaycalendar', HolidayCalendarController::class);
         });
     });
