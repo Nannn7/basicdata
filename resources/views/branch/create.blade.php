@@ -47,9 +47,19 @@
                                     </div>
                                 </div>
                                 <div class="flex justify-end">
-                                    <button type="submit" class="btn btn-primary">
-                                        Save
-                                    </button>
+                                    @if(isset($branch->id))
+                                        @can('basic-data.update')
+                                        <button type="submit" class="btn btn-primary">
+                                            Save
+                                        </button>
+                                        @endcan
+                                    @else
+                                        @can('basic-data.create')
+                                        <button type="submit" class="btn btn-primary">
+                                            Save
+                                        </button>
+                                        @endcan
+                                    @endif
                                 </div>
                             </div>
                         </div>

@@ -12,15 +12,35 @@
 
     class BranchController extends Controller
     {
-        public $user;
+        /**
+         * Get the authenticated user.
+         *
+         * @return \Illuminate\Contracts\Auth\Authenticatable|null
+         */
+        protected function getUser()
+        {
+            return \Illuminate\Support\Facades\Auth::guard('web')->user();
+        }
 
         public function index()
         {
+            // Check if the authenticated user has the required permission to view branches
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.read')) {
+                abort(403, 'Sorry! You are not allowed to view branches.');
+            }
+
             return view('basicdata::branch.index');
         }
 
         public function store(BranchRequest $request)
         {
+            // Check if the authenticated user has the required permission to create branches
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.create')) {
+                abort(403, 'Sorry! You are not allowed to create branches.');
+            }
+
             $validate = $request->validated();
 
             if ($validate) {
@@ -40,17 +60,35 @@
 
         public function create()
         {
+            // Check if the authenticated user has the required permission to create branches
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.create')) {
+                abort(403, 'Sorry! You are not allowed to create branches.');
+            }
+
             return view('basicdata::branch.create');
         }
 
         public function edit($id)
         {
+            // Check if the authenticated user has the required permission to update branches
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.update')) {
+                abort(403, 'Sorry! You are not allowed to update branches.');
+            }
+
             $branch = Branch::find($id);
             return view('basicdata::branch.create', compact('branch'));
         }
 
         public function update(BranchRequest $request, $id)
         {
+            // Check if the authenticated user has the required permission to update branches
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.update')) {
+                abort(403, 'Sorry! You are not allowed to update branches.');
+            }
+
             $validate = $request->validated();
 
             if ($validate) {
@@ -71,28 +109,42 @@
 
         public function destroy($id)
         {
+            // Check if the authenticated user has the required permission to delete branches
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.delete')) {
+                return response()->json(['success' => false, 'message' => 'Sorry! You are not allowed to delete branches.'], 403);
+            }
+
             try {
                 // Delete from database
                 $branch = Branch::find($id);
                 $branch->delete();
 
-                echo json_encode(['success' => true, 'message' => 'Branch deleted successfully']);
+                return response()->json(['success' => true, 'message' => 'Branch deleted successfully']);
             } catch (Exception $e) {
-                echo json_encode(['success' => false, 'message' => 'Failed to delete branch']);
+                return response()->json(['success' => false, 'message' => 'Failed to delete branch']);
             }
         }
 
         public function deleteMultiple(Request $request)
         {
+            // Check if the authenticated user has the required permission to delete branches
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.delete')) {
+                return response()->json(['success' => false, 'message' => 'Sorry! You are not allowed to delete branches.'], 403);
+            }
+
             $ids = $request->input('ids');
             Branch::whereIn('id', $ids)->delete();
-            return response()->json(['message' => 'Branches deleted successfully']);
+            return response()->json(['success' => true, 'message' => 'Branches deleted successfully']);
         }
 
         public function dataForDatatables(Request $request)
         {
-            if (is_null($this->user) || !$this->user->can('branch.view')) {
-                //abort(403, 'Sorry! You are not allowed to view users.');
+            // Check if the authenticated user has the required permission to view branches
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.read')) {
+                return response()->json(['success' => false, 'message' => 'Sorry! You are not allowed to view branches.'], 403);
             }
 
             // Retrieve data from the database
@@ -152,6 +204,12 @@
 
         public function export()
         {
+            // Check if the authenticated user has the required permission to export branches
+            $user = $this->getUser();
+            if (is_null($user) || !$user->can('basic-data.export')) {
+                abort(403, 'Sorry! You are not allowed to export branches.');
+            }
+
             return Excel::download(new BranchExport, 'branch.xlsx');
         }
     }
