@@ -46,6 +46,26 @@
                                         @enderror
                                     </div>
                                 </div>
+                                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                                    <label class="form-label max-w-56">
+                                        Parent Branch
+                                    </label>
+                                    <div class="flex flex-wrap items-baseline w-full">
+                                        <select class="input @error('parent_id') border-danger bg-danger-light @enderror" name="parent_id">
+                                            <option value="">-- Select Parent Branch --</option>
+                                            @foreach($branches as $parentBranch)
+                                                @if(!isset($branch->id) || $parentBranch->id != $branch->id)
+                                                    <option value="{{ $parentBranch->id }}" {{ (isset($branch->parent_id) && $branch->parent_id == $parentBranch->id) ? 'selected' : '' }}>
+                                                        {{ $parentBranch->code }} - {{ $parentBranch->name }}
+                                                    </option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        @error('parent_id')
+                                        <em class="alert text-danger text-sm">{{ $message }}</em>
+                                        @enderror
+                                    </div>
+                                </div>
                                 <div class="flex justify-end">
                                     @if(isset($branch->id))
                                         @can('basic-data.update')

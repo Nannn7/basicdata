@@ -14,7 +14,8 @@
     {
         protected $user;
 
-        public function __construct(){
+        public function __construct()
+        {
             $this->user = auth()->user();
         }
 
@@ -58,8 +59,8 @@
             if (is_null($this->user) || !$this->user->can('basic-data.create')) {
                 abort(403, 'Sorry! You are not allowed to create branches.');
             }
-
-            return view('basicdata::branch.create');
+            $branches = Branch::all();
+            return view('basicdata::branch.create', compact('branches'));
         }
 
         public function edit($id)
@@ -69,8 +70,9 @@
                 abort(403, 'Sorry! You are not allowed to update branches.');
             }
 
-            $branch = Branch::find($id);
-            return view('basicdata::branch.create', compact('branch'));
+            $branch   = Branch::findOrFail($id);
+            $branches = Branch::all();
+            return view('basicdata::branch.create', compact('branch', 'branches'));
         }
 
         public function update(BranchRequest $request, $id)
@@ -81,6 +83,14 @@
             }
 
             $validate = $request->validated();
+
+            // Tambahkan validasi manual untuk memeriksa parent_id
+            if (isset($validate['parent_id']) && $validate['parent_id'] == $id) {
+                return redirect()
+                    ->back()
+                    ->withInput()
+                    ->withErrors(['parent_id' => 'Cabang tidak dapat menjadi induk dari dirinya sendiri.']);
+            }
 
             if ($validate) {
                 try {
@@ -102,12 +112,25 @@
         {
             // Check if the authenticated user has the required permission to delete branches
             if (is_null($this->user) || !$this->user->can('basic-data.delete')) {
-                return response()->json(['success' => false, 'message' => 'Sorry! You are not allowed to delete branches.'], 403);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sorry! You are not allowed to delete branches.'
+                ], 403);
             }
 
             try {
-                // Delete from database
+                // Find the branch
                 $branch = Branch::find($id);
+
+                // Check if the branch has children
+                if ($branch->children()->exists()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Cabang dengan anak cabang tidak dapat dihapus.'
+                    ], 422);
+                }
+
+                // Delete from database
                 $branch->delete();
 
                 return response()->json(['success' => true, 'message' => 'Branch deleted successfully']);
@@ -120,10 +143,26 @@
         {
             // Check if the authenticated user has the required permission to delete branches
             if (is_null($this->user) || !$this->user->can('basic-data.delete')) {
-                return response()->json(['success' => false, 'message' => 'Sorry! You are not allowed to delete branches.'], 403);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sorry! You are not allowed to delete branches.'
+                ], 403);
             }
 
             $ids = $request->input('ids');
+
+            // Check if any of the branches have children
+            $branchesWithChildren = Branch::whereIn('id', $ids)
+                ->whereHas('children')
+                ->get();
+
+            if ($branchesWithChildren->count() > 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Beberapa cabang memiliki anak cabang dan tidak dapat dihapus.'
+                ], 422);
+            }
+
             Branch::whereIn('id', $ids)->delete();
             return response()->json(['success' => true, 'message' => 'Branches deleted successfully']);
         }
@@ -132,7 +171,10 @@
         {
             // Check if the authenticated user has the required permission to view branches
             if (is_null($this->user) || !$this->user->can('basic-data.read')) {
-                return response()->json(['success' => false, 'message' => 'Sorry! You are not allowed to view branches.'], 403);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sorry! You are not allowed to view branches.'
+                ], 403);
             }
 
             // Retrieve data from the database
@@ -172,11 +214,21 @@
             // Get the data for the current page
             $data = $query->get();
 
+            $data = $data->map(function ($item) {
+                return [
+                    'id'        => $item->id,
+                    'code'      => $item->code,
+                    'name'      => $item->name,
+                    'parent_id' => $item->parent?->name ?? null,
+                ];
+            });
+
             // Calculate the page count
             $pageCount = ceil($totalRecords / $request->get('size'));
 
             // Calculate the current page number
             $currentPage = 0 + 1;
+
 
             // Return the response data as a JSON object
             return response()->json([

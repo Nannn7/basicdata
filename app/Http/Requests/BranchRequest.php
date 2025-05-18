@@ -15,6 +15,15 @@
         {
             $rules = [
                 'name'              => 'required|string|max:255',
+                'parent_id' => [
+                    'nullable',
+                    'exists:branches,id',
+                    function ($attribute, $value, $fail) {
+                        if ($value == $this->route('branch')) {
+                            $fail('Cabang tidak dapat menjadi induk dari dirinya sendiri.');
+                        }
+                    },
+                ],
                 'status'            => 'nullable|boolean',
                 'authorized_at'     => 'nullable|datetime',
                 'authorized_status' => 'nullable|string|max:1',
