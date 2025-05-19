@@ -20,7 +20,7 @@
                     <div class="flex flex-wrap gap-2.5">
                         <div class="h-[24px] border border-r-gray-200"></div>
                         @can('basic-data.export')
-                        <a class="btn btn-sm btn-light" href="{{ route('basicdata.holidaycalendar.export') }}"> Export to Excel </a>
+                        <a id="export-btn" class="btn btn-sm btn-light" href="{{ route('basicdata.holidaycalendar.export') }}"> Export to Excel </a>
                         @endcan
                         @can('basic-data.create')
                         <a class="btn btn-sm btn-primary" href="{{ route('basicdata.holidaycalendar.create') }}"> Tambah Hari Libur </a>
@@ -149,6 +149,7 @@
         const element = document.querySelector('#holiday-calendar-table');
         const searchInput = document.getElementById('search');
         const deleteSelectedButton = document.getElementById('deleteSelected');
+        const exportBtn = document.getElementById('export-btn');
 
         const apiUrl = element.getAttribute('data-api-url');
         const dataTableOptions = {
@@ -205,10 +206,28 @@
         };
 
         let dataTable = new KTDataTable(element, dataTableOptions);
+
+        // Update export URL with filters
+        function updateExportUrl() {
+            let url = new URL(exportBtn.href);
+
+            if (searchInput.value) {
+                url.searchParams.set('search', searchInput.value);
+            } else {
+                url.searchParams.delete('search');
+            }
+
+            exportBtn.href = url.toString();
+        }
+
         // Custom search functionality
         searchInput.addEventListener('input', function () {
             const searchValue = this.value.trim();
+            dataTable.goPage(1);
             dataTable.search(searchValue, true);
+
+            // Update export URL with search parameter
+            updateExportUrl();
         });
 
         function updateDeleteButtonVisibility() {

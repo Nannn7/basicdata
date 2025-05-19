@@ -11,9 +11,27 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class HolidayCalendarExport implements WithColumnFormatting, WithHeadings, FromCollection, WithMapping
 {
+    protected $search;
+
+    public function __construct($search = null)
+    {
+        $this->search = $search;
+    }
+
     public function collection()
     {
-        return HolidayCalendar::all();
+        $query = HolidayCalendar::query();
+
+        if (!empty($this->search)) {
+            $search = $this->search;
+            $query->where(function ($q) use ($search) {
+                $q->whereRaw('LOWER(description) LIKE ?', ['%' . strtolower($search) . '%'])
+                  ->orWhereRaw('LOWER(type) LIKE ?', ['%' . strtolower($search) . '%'])
+                  ->orWhereRaw('CAST(date AS TEXT) LIKE ?', ['%' . $search . '%']);
+            });
+        }
+
+        return $query->get();
     }
 
     public function map($row): array

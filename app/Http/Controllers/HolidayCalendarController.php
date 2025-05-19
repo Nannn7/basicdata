@@ -5,7 +5,6 @@
     use App\Http\Controllers\Controller;
     use Exception;
     use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Auth;
     use Maatwebsite\Excel\Facades\Excel;
     use Modules\Basicdata\Exports\HolidayCalendarExport;
     use Modules\Basicdata\Http\Requests\HolidayCalendarRequest;
@@ -191,7 +190,7 @@
             $pageCount = ceil($totalRecords / $request->get('size'));
 
             // Calculate the current page number
-            $currentPage = 0 + 1;
+            $currentPage = $request->get('page') ?: 1;
 
             // Return the response data as a JSON object
             return response()->json([
@@ -205,13 +204,16 @@
             ]);
         }
 
-        public function export()
+        public function export(Request $request)
         {
             // Check if the authenticated user has the required permission to export holiday calendars
             if (is_null($this->user) || !$this->user->can('basic-data.export')) {
                 abort(403, 'Sorry! You are not allowed to export holiday calendars.');
             }
 
-            return Excel::download(new HolidayCalendarExport, 'holiday_calendar.xlsx');
+            // Get search parameter from request
+            $search = $request->get('search');
+
+            return Excel::download(new HolidayCalendarExport($search), 'holiday_calendar.xlsx');
         }
     }
