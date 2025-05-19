@@ -182,11 +182,24 @@
 
             // Apply search filter if provided
             if ($request->has('search') && !empty($request->get('search'))) {
-                $search = $request->get('search');
-                $query->where(function ($q) use ($search) {
-                    $q->where('code', 'LIKE', "%$search%");
-                    $q->orWhere('name', 'LIKE', "%$search%");
-                });
+                $search = json_decode($request->get('search'));
+
+                if(isset($search->search)) {
+                    $search_ = strtolower($search->search);
+                    $query->where(function ($q) use ($search_) {
+                        $q->whereRaw('LOWER(code) LIKE ?', ['%' . strtolower($search_) . '%']);
+                        $q->orWhereRaw('LOWER(name) LIKE ?', ['%' . strtolower($search_) . '%']);
+                        $q->orWhereHas('parent', function ($q) use ($search_) {
+                            $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($search_) . '%']);
+                        });
+                    });
+                }
+
+                // Apply parent filter if provided
+                if (isset($search->parent_id) && !empty($search->parent_id)) {
+                    $parentId = $search->parent_id;
+                    $query->where('parent_id', $parentId);
+                }
             }
 
             // Apply sorting if provided
@@ -227,7 +240,7 @@
             $pageCount = ceil($totalRecords / $request->get('size'));
 
             // Calculate the current page number
-            $currentPage = 0 + 1;
+            $currentPage = $request->get('page') ?: 1;
 
 
             // Return the response data as a JSON object
@@ -242,13 +255,17 @@
             ]);
         }
 
-        public function export()
+        public function export(Request $request)
         {
             // Check if the authenticated user has the required permission to export branches
             if (is_null($this->user) || !$this->user->can('basic-data.export')) {
                 abort(403, 'Sorry! You are not allowed to export branches.');
             }
 
-            return Excel::download(new BranchExport, 'branch.xlsx');
+            // Get search parameter from request
+            $search = $request->get('search');
+            $parentId = $request->get('parent_id');
+
+            return Excel::download(new BranchExport($search,$parentId), 'branch.xlsx');
         }
     }

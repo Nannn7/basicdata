@@ -2,7 +2,6 @@
 
     namespace Modules\Basicdata\Models;
 
-
     class Branch extends Base
     {
         protected $table    = 'branches';

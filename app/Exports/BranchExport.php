@@ -9,11 +9,38 @@
     use Modules\Basicdata\Models\Branch;
     use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-    class BranchExport implements WithColumnFormatting, WithHeadings, FromCollection, withMapping
+    class BranchExport implements WithColumnFormatting, WithHeadings, FromCollection, WithMapping
     {
+        protected $search;
+
+        public function __construct($search = null, $parent_id = null)
+        {
+            $this->search    = $search;
+            $this->parent_id = $parent_id;
+        }
+
         public function collection()
         {
-            return Branch::all();
+            $query = Branch::query();
+
+            if (!empty($this->search)) {
+                $search = strtolower($this->search);
+                $query->where(function ($q) use ($search) {
+                    $q->whereRaw('LOWER(code) LIKE ?', ['%' . $search . '%'])
+                      ->orWhereRaw('LOWER(name) LIKE ?', ['%' . $search . '%'])
+                      ->orWhereHas('parent', function ($q) use ($search) {
+                          $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($search) . '%']);
+                      });
+                });
+            }
+
+            // Apply parent filter if provided
+            if (isset($this->parent_id) && !empty($this->parent_id)) {
+                $parentId = $this->parent_id;
+                $query->where('parent_id', $parentId);
+            }
+
+            return $query->get();
         }
 
         public function map($row)
@@ -23,6 +50,7 @@
                 $row->id,
                 $row->code,
                 $row->name,
+                $row->parent ? $row->parent->name : '',
                 $row->created_at
             ];
         }
@@ -34,6 +62,7 @@
                 'ID',
                 'Code',
                 'Name',
+                'Parent Branch',
                 'Created At'
             ];
         }

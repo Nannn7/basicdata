@@ -47,8 +47,6 @@
         public function getActivitylogOptions()
         : LogOptions
         {
-            //CauserResolver::setCauser(auth()->user());
-
             return LogOptions::defaults()->logAll()->useLogName('Basic Data');
         }
     }
