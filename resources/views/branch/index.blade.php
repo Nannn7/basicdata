@@ -259,7 +259,6 @@
         });
 
         exportBtn.addEventListener('click', function() {
-            console.log('Exporting data...');
             updateExportUrl();
             applyFilters();
         })

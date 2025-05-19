@@ -191,13 +191,16 @@
             ]);
         }
 
-        public function export()
+        public function export(Request $request)
         {
             // Check if the authenticated user has the required permission to export currencies
             if (is_null($this->user) || !$this->user->can('basic-data.export')) {
                 abort(403, 'Sorry! You are not allowed to export currencies.');
             }
 
-            return Excel::download(new CurrencyExport, 'currency.xlsx');
+            // Get search parameter from request
+            $search = $request->get('search');
+
+            return Excel::download(new CurrencyExport($search), 'currency.xlsx');
         }
     }
