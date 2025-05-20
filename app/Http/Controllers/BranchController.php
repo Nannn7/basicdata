@@ -189,6 +189,7 @@
                     $query->where(function ($q) use ($search_) {
                         $q->whereRaw('LOWER(code) LIKE ?', ['%' . strtolower($search_) . '%']);
                         $q->orWhereRaw('LOWER(name) LIKE ?', ['%' . strtolower($search_) . '%']);
+                        $q->orWhereRaw('LOWER(address) LIKE ?', ['%' . strtolower($search_) . '%']);
                         $q->orWhereHas('parent', function ($q) use ($search_) {
                             $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($search_) . '%']);
                         });
@@ -233,6 +234,7 @@
                     'code'      => $item->code,
                     'name'      => $item->name,
                     'parent_id' => $item->parent?->name ?? null,
+                    'address'   => str_replace(']', "", $item->address),
                 ];
             });
 

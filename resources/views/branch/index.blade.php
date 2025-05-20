@@ -57,6 +57,10 @@
                                 <span class="sort"> <span class="sort-label"> Cabang Induk</span>
                                     <span class="sort-icon"> </span> </span>
                             </th>
+                            <th class="min-w-[250px]" data-datatable-column="address">
+                                <span class="sort"> <span class="sort-label"> Address</span>
+                                    <span class="sort-icon"> </span> </span>
+                            </th>
                             <th class="min-w-[50px] text-center" data-datatable-column="actions">Action</th>
                         </tr>
                         </thead>
@@ -182,6 +186,9 @@
                 },
                 parent_id: {
                     title: 'Cabang Induk',
+                },
+                address: {
+                    title: 'Address',
                 },
                 actions: {
                     title: 'Status',

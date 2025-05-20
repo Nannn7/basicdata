@@ -5,7 +5,24 @@
     class Branch extends Base
     {
         protected $table    = 'branches';
-        protected $fillable = ['code', 'name', 'status', 'authorized_at', 'authorized_status', 'authorized_by', 'parent_id'];
+        protected $fillable = [
+            'code',
+            'name',
+            'address',
+            'mnemonic',
+            'customer_company',
+            'customer_mnemonic',
+            'company_group',
+            'curr_no',
+            'co_code',
+            'l_vendor_atm',
+            'l_vendor_cpc',
+            'status',
+            'authorized_at',
+            'authorized_status',
+            'authorized_by',
+            'parent_id'
+        ];
 
         /**
          * Get the parent branch of this branch

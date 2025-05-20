@@ -28,6 +28,7 @@
                 $query->where(function ($q) use ($search) {
                     $q->whereRaw('LOWER(code) LIKE ?', ['%' . $search . '%'])
                       ->orWhereRaw('LOWER(name) LIKE ?', ['%' . $search . '%'])
+                      ->orWhereRaw('LOWER(address) LIKE ?', ['%' . $search . '%'])
                       ->orWhereHas('parent', function ($q) use ($search) {
                           $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($search) . '%']);
                       });
@@ -51,6 +52,7 @@
                 $row->code,
                 $row->name,
                 $row->parent ? $row->parent->name : '',
+                $row->address,
                 $row->created_at
             ];
         }
@@ -63,6 +65,7 @@
                 'Code',
                 'Name',
                 'Parent Branch',
+                'Address',
                 'Created At'
             ];
         }
@@ -72,7 +75,7 @@
         {
             return [
                 'A' => NumberFormat::FORMAT_NUMBER,
-                'D' => NumberFormat::FORMAT_DATE_DATETIME
+                'E' => NumberFormat::FORMAT_DATE_DATETIME
             ];
         }
     }
