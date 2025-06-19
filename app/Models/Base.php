@@ -7,7 +7,7 @@
     use Spatie\Activitylog\Facades\CauserResolver;
     use Spatie\Activitylog\LogOptions;
     use Spatie\Activitylog\Traits\LogsActivity;
-    use Mattiverse\Userstamps\Traits\Userstamps;
+    use Wildside\Userstamps\Userstamps;
 
 
     /**
