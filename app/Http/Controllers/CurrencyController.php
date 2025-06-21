@@ -14,8 +14,12 @@
     {
         protected $user;
 
-        public function __construct(){
-            $this->user = auth()->user();
+        public function __construct()
+        {
+            $this->middleware(function ($request, $next) {
+                $this->user = auth()->user();
+                return $next($request);
+            });
         }
 
         public function index()
