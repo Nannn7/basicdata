@@ -2,6 +2,7 @@
 
     namespace Modules\Basicdata\Http\Controllers;
 
+    use Illuminate\Support\Facades\Auth;
     use App\Http\Controllers\Controller;
     use Exception;
     use Illuminate\Http\Request;
@@ -16,10 +17,7 @@
 
         public function __construct()
         {
-            $this->middleware(function ($request, $next) {
-                $this->user = auth()->user();
-                return $next($request);
-            });
+             $this->user = Auth::guard('web')->user();
         }
 
         public function index()

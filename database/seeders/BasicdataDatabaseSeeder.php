@@ -12,6 +12,7 @@ class BasicdataDatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            PermissionSeeder::class,
             BranchesSeeder::class,
             CurrencySeeder::class,
             HolidayCalendarSeeder::class
