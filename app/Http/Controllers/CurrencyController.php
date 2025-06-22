@@ -9,6 +9,7 @@
     use Modules\Basicdata\Exports\CurrencyExport;
     use Modules\Basicdata\Http\Requests\CurrencyRequest;
     use Modules\Basicdata\Models\Currency;
+    use Illuminate\Support\Facades\Auth;
 
     class CurrencyController extends Controller
     {
@@ -16,7 +17,14 @@
 
         public function __construct()
         {
-             $this->user = Auth::guard('web')->user();
+            // Mengatur middleware auth
+            $this->middleware('auth');
+
+            // Mengatur user setelah middleware auth dijalankan
+            $this->middleware(function ($request, $next) {
+                $this->user = Auth::user();
+                return $next($request);
+            });
         }
 
         public function index()
