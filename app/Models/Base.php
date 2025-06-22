@@ -4,10 +4,9 @@
 
     use Illuminate\Database\Eloquent\Model;
     use Illuminate\Database\Eloquent\SoftDeletes;
-    use Spatie\Activitylog\Facades\CauserResolver;
     use Spatie\Activitylog\LogOptions;
     use Spatie\Activitylog\Traits\LogsActivity;
-    use Wildside\Userstamps\Userstamps;
+    use Mattiverse\Userstamps\Traits\Userstamps;
 
 
     /**
