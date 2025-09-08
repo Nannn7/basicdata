@@ -12,6 +12,7 @@
     class BranchExport implements WithColumnFormatting, WithHeadings, FromCollection, WithMapping
     {
         protected $search;
+        protected $parent_id;
 
         public function __construct($search = null, $parent_id = null)
         {
