@@ -59,7 +59,8 @@
                 ['code' => 'PKR', 'name' => 'Pakistani Rupee', 'symbol' => '₨', 'decimal_places' => 2, 'status' => true, 'created_at' => $now, 'updated_at' => $now],
             ];
 
-            DB::table('currencies')->truncate();
+            // DB::table('currencies')->truncate();
+            DB::table('currencies')->delete();
             DB::table('currencies')->insert($currencies);
         }
     }

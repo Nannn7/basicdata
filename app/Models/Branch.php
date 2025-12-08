@@ -8,6 +8,7 @@
         protected $fillable = [
             'code',
             'name',
+            'is_dalam_kota',
             'address',
             'mnemonic',
             'customer_company',
