@@ -28,6 +28,7 @@
                 'authorized_at'     => 'nullable|datetime',
                 'authorized_status' => 'nullable|string|max:1',
                 'authorized_by'     => 'nullable|exists:users,id',
+                'is_dalam_kota'     => 'nullable|in:0,1',
             ];
 
             if ($this->method() == 'PUT') {
