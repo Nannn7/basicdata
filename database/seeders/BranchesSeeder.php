@@ -18,7 +18,7 @@ class BranchesSeeder extends Seeder
         $branches = [
             [
                 'code' => 'ID0010001',
-                'name' => 'PT. Bank Artha Graha',
+                'name' => 'KPNO',
                 'status' => true,
                 'created_at' => $now,
                 'updated_at' => $now
@@ -235,14 +235,14 @@ class BranchesSeeder extends Seeder
             ],
             [
                 'code' => 'ID0010039',
-                'name' => 'Cimahi - KCP',
+                'name' => 'CIMAHI - KCP',
                 'status' => true,
                 'created_at' => $now,
                 'updated_at' => $now
             ],
             [
                 'code' => 'ID0010050',
-                'name' => 'Ir.Soekarno(MERR)-KCP',
+                'name' => 'IR.SOEKARNO(MERR)-KCP',
                 'status' => true,
                 'created_at' => $now,
                 'updated_at' => $now
@@ -494,7 +494,7 @@ class BranchesSeeder extends Seeder
             ],
             [
                 'code' => 'ID0010108',
-                'name' => 'Tzu Chi - KK',
+                'name' => 'TZU CHI - KK',
                 'status' => true,
                 'created_at' => $now,
                 'updated_at' => $now
@@ -557,7 +557,7 @@ class BranchesSeeder extends Seeder
             ],
             [
                 'code' => 'ID0010131',
-                'name' => 'Veteran Makassar - KCP',
+                'name' => 'VETERAN MAKASSAR - KCP',
                 'status' => true,
                 'created_at' => $now,
                 'updated_at' => $now
