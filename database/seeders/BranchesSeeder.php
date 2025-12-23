@@ -186,7 +186,7 @@ class BranchesSeeder extends Seeder
             ],
             [
                 'code' => 'ID0010031',
-                'name' => 'BKR Bandung - KCP',
+                'name' => 'BKR BANDUNG - KCP',
                 'status' => true,
                 'created_at' => $now,
                 'updated_at' => $now
@@ -319,7 +319,7 @@ class BranchesSeeder extends Seeder
             ],
             [
                 'code' => 'ID0010063',
-                'name' => 'Diponegoro Denpasar KK',
+                'name' => 'DIPONEGORO DENPASAR KK',
                 'status' => true,
                 'created_at' => $now,
                 'updated_at' => $now
@@ -704,7 +704,7 @@ class BranchesSeeder extends Seeder
             ],
             [
                 'code' => 'ID0010272',
-                'name' => 'Setiabudi Kuningan KK',
+                'name' => 'SETIABUDI KUNINGAN KK',
                 'status' => true,
                 'created_at' => $now,
                 'updated_at' => $now
