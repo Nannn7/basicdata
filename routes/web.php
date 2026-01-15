@@ -1,11 +1,11 @@
 <?php
 
-    use Illuminate\Support\Facades\Route;
-    use Modules\Basicdata\Http\Controllers\BranchController;
-    use Modules\Basicdata\Http\Controllers\CurrencyController;
-    use Modules\Basicdata\Http\Controllers\HolidayCalendarController;
+use Illuminate\Support\Facades\Route;
+use Modules\Basicdata\Http\Controllers\BranchController;
+use Modules\Basicdata\Http\Controllers\CurrencyController;
+use Modules\Basicdata\Http\Controllers\HolidayCalendarController;
 
-    /*
+/*
     |--------------------------------------------------------------------------
     | Web Routes
     |--------------------------------------------------------------------------
@@ -16,50 +16,50 @@
     |
     */
 
-    Route::middleware(['auth'])->group(function () {
-        Route::name('basicdata.')->prefix('basic-data')->group(function () {
-            Route::name('currency.')->prefix('mata-uang')->group(function () {
-                Route::get('datatables', [CurrencyController::class, 'dataForDatatables'])->name('datatables');
-                Route::get('export', [CurrencyController::class, 'export'])->name('export');
-                Route::post('delete-multiple', [CurrencyController::class, 'deleteMultiple'])->name('deleteMultiple');
-            });
-
-            Route::resource('mata-uang', CurrencyController::class, [
-                'names' => [
-                    'index'   => 'currency.index',
-                    'show'    => 'currency.show',
-                    'create'  => 'currency.create',
-                    'store'   => 'currency.store',
-                    'edit'    => 'currency.edit',
-                    'update'  => 'currency.update',
-                    'destroy' => 'currency.destroy',
-                ],
-            ]);
-
-
-            Route::name('branch.')->prefix('cabang')->group(function () {
-                Route::get('datatables', [BranchController::class, 'dataForDatatables'])->name('datatables');
-                Route::get('export', [BranchController::class, 'export'])->name('export');
-                Route::post('delete-multiple', [BranchController::class, 'deleteMultiple'])->name('deleteMultiple');
-            });
-
-            Route::resource('cabang', BranchController::class, [
-                'names' => [
-                    'index'   => 'branch.index',
-                    'show'    => 'branch.show',
-                    'create'  => 'branch.create',
-                    'store'   => 'branch.store',
-                    'edit'    => 'branch.edit',
-                    'update'  => 'branch.update',
-                    'destroy' => 'branch.destroy',
-                ],
-            ]);
-
-            Route::group(['prefix' => 'holidaycalendar', 'as' => 'holidaycalendar.'], function () {
-                Route::get('/datatables', [HolidayCalendarController::class, 'dataForDatatables'])->name('datatables');
-                Route::get('/export', [HolidayCalendarController::class, 'export'])->name('export');
-                Route::post('delete-multiple', [HolidayCalendarController::class, 'deleteMultiple'])->name('deleteMultiple');
-            });
-            Route::resource('holidaycalendar', HolidayCalendarController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::name('basicdata.')->prefix('basic-data')->group(function () {
+        Route::name('currency.')->prefix('mata-uang')->group(function () {
+            Route::get('datatables', [CurrencyController::class, 'dataForDatatables'])->name('datatables');
+            Route::get('export', [CurrencyController::class, 'export'])->name('export');
+            Route::post('delete-multiple', [CurrencyController::class, 'deleteMultiple'])->name('deleteMultiple');
         });
+
+        Route::resource('mata-uang', CurrencyController::class, [
+            'names' => [
+                'index'   => 'currency.index',
+                'show'    => 'currency.show',
+                'create'  => 'currency.create',
+                'store'   => 'currency.store',
+                'edit'    => 'currency.edit',
+                'update'  => 'currency.update',
+                'destroy' => 'currency.destroy',
+            ],
+        ]);
+
+
+        Route::name('branch.')->prefix('cabang')->group(function () {
+            Route::get('datatables', [BranchController::class, 'dataForDatatables'])->name('datatables');
+            Route::get('export', [BranchController::class, 'export'])->name('export');
+            Route::post('delete-multiple', [BranchController::class, 'deleteMultiple'])->name('deleteMultiple');
+        });
+
+        Route::resource('cabang', BranchController::class, [
+            'names' => [
+                'index'   => 'branch.index',
+                'show'    => 'branch.show',
+                'create'  => 'branch.create',
+                'store'   => 'branch.store',
+                'edit'    => 'branch.edit',
+                'update'  => 'branch.update',
+                'destroy' => 'branch.destroy',
+            ],
+        ]);
+
+        Route::group(['prefix' => 'holidaycalendar', 'as' => 'holidaycalendar.'], function () {
+            Route::get('/datatables', [HolidayCalendarController::class, 'dataForDatatables'])->name('datatables');
+            Route::get('/export', [HolidayCalendarController::class, 'export'])->name('export');
+            Route::post('delete-multiple', [HolidayCalendarController::class, 'deleteMultiple'])->name('deleteMultiple');
+        });
+        Route::resource('holidaycalendar', HolidayCalendarController::class);
     });
+});
