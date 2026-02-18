@@ -15,7 +15,8 @@ class BasicdataDatabaseSeeder extends Seeder
             PermissionSeeder::class,
             BranchesSeeder::class,
             CurrencySeeder::class,
-            HolidayCalendarSeeder::class
+            HolidayCalendarSeeder::class,
+            UpdateBranchesIsDalamKotaSeeder::class,
         ]);
     }
 }
