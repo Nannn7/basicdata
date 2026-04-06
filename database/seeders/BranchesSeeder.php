@@ -598,6 +598,13 @@ class BranchesSeeder extends Seeder
                 'updated_at' => $now
             ],
             [
+                'code' => 'ID0010172',
+                'name' => 'AMBON TUAL MALUKU - KCP',
+                'status' => true,
+                'created_at' => $now,
+                'updated_at' => $now
+            ],
+            [
                 'code' => 'ID0010180',
                 'name' => 'TERNATE - KC',
                 'status' => true,
