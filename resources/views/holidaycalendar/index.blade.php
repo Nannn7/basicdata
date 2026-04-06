@@ -91,10 +91,10 @@
                         }
                     });
 
-                    $.ajax(`basic-data/holiday-calendar/${data}`, {
+                    $.ajax(`basic-data/holidaycalendar/${data}`, {
                         type: 'DELETE'
                     }).then((response) => {
-                        swal.fire('Deleted!', 'Holiday has been deleted.', 'success').then(() => {
+                        Swal.fire('Deleted!', 'Holiday has been deleted.', 'success').then(() => {
                             window.location.reload();
                         });
                     }).catch((error) => {
