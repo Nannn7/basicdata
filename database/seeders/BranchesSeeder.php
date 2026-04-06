@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Basicdata\database\seeders;
+namespace Modules\Basicdata\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -851,6 +851,17 @@ class BranchesSeeder extends Seeder
             ],
         ];
 
-        DB::table('branches')->insert($branches);
+        // Make seeding idempotent on populated databases and restore soft-deleted rows.
+        $branches = array_map(static function (array $branch): array {
+            $branch['deleted_at'] = null;
+
+            return $branch;
+        }, $branches);
+
+        DB::table('branches')->upsert(
+            $branches,
+            ['code'],
+            ['name', 'status', 'updated_at', 'deleted_at']
+        );
     }
 }

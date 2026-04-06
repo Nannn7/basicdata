@@ -3,7 +3,6 @@
     namespace Modules\Basicdata\Database\Seeders;
 
     use Illuminate\Database\Seeder;
-    use Illuminate\Support\Str;
     use Modules\Usermanagement\Models\PermissionGroup;
 
     class PermissionSeeder extends Seeder
@@ -11,22 +10,24 @@
         /**
          * Run the database seeds.
          */
-        public function run()
+        public function run(): void
         {
-            $data = $this->data();
+            foreach ($this->data() as $value) {
+                $group = PermissionGroup::withTrashed()->updateOrCreate(
+                    ['name' => $value['name']],
+                    ['slug' => $value['slug']]
+                );
 
-            foreach ($data as $value) {
-                PermissionGroup::updateOrCreate([
-                    'name'       => $value['name'],
-                    'slug'       => Str::slug($value['name'])
-                ]);
+                if ($group->trashed()) {
+                    $group->restore();
+                }
             }
         }
 
-        public function data()
+        public function data(): array
         {
             return [
-                ['name' => 'basic-data']
+                ['name' => 'basic-data', 'slug' => 'basic-data'],
             ];
         }
     }

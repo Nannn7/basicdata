@@ -14,8 +14,9 @@ class BasicdataDatabaseSeeder extends Seeder
         $this->call([
             PermissionSeeder::class,
             BranchesSeeder::class,
+            UpdateBranchesIsDalamKotaSeeder::class,
             CurrencySeeder::class,
-            HolidayCalendarSeeder::class
+            HolidayCalendarSeeder::class,
         ]);
     }
 }

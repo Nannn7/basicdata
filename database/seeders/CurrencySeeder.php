@@ -13,7 +13,7 @@
          *
          * @return void
          */
-        public function run()
+        public function run(): void
         {
             $now = Carbon::now();
             $currencies = [
@@ -59,8 +59,16 @@
                 ['code' => 'PKR', 'name' => 'Pakistani Rupee', 'symbol' => '₨', 'decimal_places' => 2, 'status' => true, 'created_at' => $now, 'updated_at' => $now],
             ];
 
-            // DB::table('currencies')->truncate();
-            DB::table('currencies')->delete();
-            DB::table('currencies')->insert($currencies);
+            $currencies = array_map(static function (array $currency): array {
+                $currency['deleted_at'] = null;
+
+                return $currency;
+            }, $currencies);
+
+            DB::table('currencies')->upsert(
+                $currencies,
+                ['code'],
+                ['name', 'symbol', 'decimal_places', 'status', 'updated_at', 'deleted_at']
+            );
         }
     }
