@@ -59,6 +59,39 @@
                             "administrator",
                             "admin"
                         ]
+                    },
+                    {
+                        "title": "Developer Kerjasama",
+                        "path": "basicdata.developer",
+                        "classes": "",
+                        "attributes": [],
+                        "permission": "",
+                        "roles": [
+                            "administrator",
+                            "admin"
+                        ]
+                    },
+                    {
+                        "title": "Notaris",
+                        "path": "basicdata.notaris",
+                        "classes": "",
+                        "attributes": [],
+                        "permission": "",
+                        "roles": [
+                            "administrator",
+                            "admin"
+                        ]
+                    },
+                    {
+                        "title": "Nama Dokumen",
+                        "path": "basicdata.master-nama-dokumen",
+                        "classes": "",
+                        "attributes": [],
+                        "permission": "",
+                        "roles": [
+                            "administrator",
+                            "admin"
+                        ]
                     }
                 ]
             }
