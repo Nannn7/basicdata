@@ -31,9 +31,13 @@
                 <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label class="form-label max-w-56">Kode Produk</label>
                     <div class="flex flex-wrap items-baseline w-full">
-                        <input class="input @error('kode_produk') border-danger bg-danger-light @enderror"
-                            type="text" name="kode_produk"
-                            value="{{ old('kode_produk', $masterNamaDokumen->kode_produk ?? '') }}">
+                        <input class="input @error('kode_produk') border-danger bg-danger-light @enderror" type="text"
+                            name="kode_produk" value="{{ old('kode_produk', $masterNamaDokumen->kode_produk ?? '') }}"
+                            {{ isset($masterNamaDokumen->id) ? 'readonly' : '' }}
+                            style="{{ isset($masterNamaDokumen->id)
+                                ? 'background-color:#e5e7eb !important; color:#6b7280 !important; cursor:not-allowed !important; border-color:#d1d5db !important;'
+                                : '' }}">
+
                         @error('kode_produk')
                             <em class="alert text-danger text-sm">{{ $message }}</em>
                         @enderror
