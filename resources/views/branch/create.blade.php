@@ -30,8 +30,11 @@
                         Code
                     </label>
                     <div class="flex flex-wrap items-baseline w-full">
-                        <input class="input  @error('code') border-danger bg-danger-light @enderror" type="text"
-                            name="code" value="{{ $branch->code ?? '' }}">
+                        <input class="input @error('code') border-danger bg-danger-light @enderror" type="text"
+                            name="code" value="{{ $branch->code ?? '' }}" {{ isset($branch->id) ? 'readonly' : '' }}
+                            style="{{ isset($branch->id)
+                                ? 'background-color:#e5e7eb !important; color:#6b7280 !important; cursor:not-allowed !important; border-color:#d1d5db !important;'
+                                : '' }}">
                         @error('code')
                             <em class="alert text-danger text-sm">{{ $message }}</em>
                         @enderror
