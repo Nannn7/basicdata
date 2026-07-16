@@ -24,7 +24,7 @@
                 "permission": "",
                 "roles": [
                     "administrator",
-                    "admin"
+                    "admin siskon"
                 ],
                 "sub": [
                     {
@@ -35,7 +35,7 @@
                         "permission": "",
                         "roles": [
                             "administrator",
-                            "admin"
+                            "admin siskon"
                         ]
                     },
                     {
@@ -46,7 +46,7 @@
                         "permission": "",
                         "roles": [
                             "administrator",
-                            "admin"
+                            "admin siskon"
                         ]
                     },
                     {
@@ -57,7 +57,7 @@
                         "permission": "",
                         "roles": [
                             "administrator",
-                            "admin"
+                            "admin siskon"
                         ]
                     }
                 ]
