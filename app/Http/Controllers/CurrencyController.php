@@ -10,15 +10,19 @@
     use Modules\Basicdata\Http\Requests\CurrencyRequest;
     use Modules\Basicdata\Models\Currency;
     use Illuminate\Support\Facades\Auth;
+    use Modules\Corsec\Models\ApprovalRequest;
+    use Modules\Corsec\Services\ApprovalRequestService;
 
     class CurrencyController extends Controller
     {
         protected $user;
+        private readonly ApprovalRequestService $approvalService;
 
         public function __construct()
         {
             // Mengatur middleware auth
             $this->middleware('auth');
+            $this->approvalService = app(ApprovalRequestService::class);
 
             // Mengatur user setelah middleware auth dijalankan
             $this->middleware(function ($request, $next) {
@@ -48,11 +52,17 @@
 
             if ($validate) {
                 try {
-                    // Save to database
-                    Currency::create($validate);
+                    $this->approvalService->createRequest(
+                        Currency::class,
+                        ApprovalRequest::ACTION_CREATE,
+                        null,
+                        $validate,
+                        null,
+                        'Pengajuan create currency'
+                    );
                     return redirect()
                         ->route('basicdata.currency.index')
-                        ->with('success', 'Currency created successfully');
+                        ->with('success', 'Pengajuan currency berhasil dikirim untuk approval.');
                 } catch (Exception $e) {
                     return redirect()
                         ->route('basicdata.currency.create')
@@ -93,12 +103,18 @@
 
             if ($validate) {
                 try {
-                    // Update in database
-                    $currency = Currency::find($id);
-                    $currency->update($validate);
+                    $currency = Currency::findOrFail($id);
+                    $this->approvalService->createRequest(
+                        Currency::class,
+                        ApprovalRequest::ACTION_UPDATE,
+                        (string) $currency->id,
+                        $validate,
+                        $currency->only(array_keys($validate)),
+                        'Pengajuan update currency'
+                    );
                     return redirect()
                         ->route('basicdata.currency.index')
-                        ->with('success', 'Currency updated successfully');
+                        ->with('success', 'Pengajuan perubahan currency berhasil dikirim untuk approval.');
                 } catch (Exception $e) {
                     return redirect()
                         ->route('basicdata.currency.edit', $id)

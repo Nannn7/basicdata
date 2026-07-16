@@ -10,15 +10,19 @@
     use Modules\Basicdata\Exports\BranchExport;
     use Modules\Basicdata\Http\Requests\BranchRequest;
     use Modules\Basicdata\Models\Branch;
+    use Modules\Corsec\Models\ApprovalRequest;
+    use Modules\Corsec\Services\ApprovalRequestService;
 
     class BranchController extends Controller
     {
         protected $user;
+        private readonly ApprovalRequestService $approvalService;
 
         public function __construct()
         {
             // Mengatur middleware auth
             $this->middleware('auth');
+            $this->approvalService = app(ApprovalRequestService::class);
 
             // Mengatur user setelah middleware auth dijalankan
             $this->middleware(function ($request, $next) {
@@ -52,11 +56,17 @@
 
             if ($validate) {
                 try {
-                    // Save to database
-                    Branch::create($validate);
+                    $this->approvalService->createRequest(
+                        Branch::class,
+                        ApprovalRequest::ACTION_CREATE,
+                        null,
+                        $validate,
+                        null,
+                        'Pengajuan create branch'
+                    );
                     return redirect()
                         ->route('basicdata.branch.index')
-                        ->with('success', 'Branch created successfully');
+                        ->with('success', 'Pengajuan branch berhasil dikirim untuk approval.');
                 } catch (Exception $e) {
                     return redirect()
                         ->route('basicdata.branch.create')
@@ -111,12 +121,18 @@
 
             if ($validate) {
                 try {
-                    // Update in database
-                    $branch = Branch::find($id);
-                    $branch->update($validate);
+                    $branch = Branch::findOrFail($id);
+                    $this->approvalService->createRequest(
+                        Branch::class,
+                        ApprovalRequest::ACTION_UPDATE,
+                        (string) $branch->id,
+                        $validate,
+                        $branch->only(array_keys($validate)),
+                        'Pengajuan update branch'
+                    );
                     return redirect()
                         ->route('basicdata.branch.index')
-                        ->with('success', 'Branch updated successfully');
+                        ->with('success', 'Pengajuan perubahan branch berhasil dikirim untuk approval.');
                 } catch (Exception $e) {
                     return redirect()
                         ->route('basicdata.branch.edit', $id)

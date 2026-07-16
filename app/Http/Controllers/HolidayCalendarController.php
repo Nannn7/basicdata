@@ -10,15 +10,19 @@
     use Modules\Basicdata\Http\Requests\HolidayCalendarRequest;
     use Modules\Basicdata\Models\HolidayCalendar;
     use Illuminate\Support\Facades\Auth;
+    use Modules\Corsec\Models\ApprovalRequest;
+    use Modules\Corsec\Services\ApprovalRequestService;
 
     class HolidayCalendarController extends Controller
     {
         protected $user;
+        private readonly ApprovalRequestService $approvalService;
 
         public function __construct()
         {
             // Mengatur middleware auth
             $this->middleware('auth');
+            $this->approvalService = app(ApprovalRequestService::class);
 
             // Mengatur user setelah middleware auth dijalankan
             $this->middleware(function ($request, $next) {
@@ -49,11 +53,18 @@
 
             if ($validate) {
                 try {
-                    HolidayCalendar::create($validate);
+                    $this->approvalService->createRequest(
+                        HolidayCalendar::class,
+                        ApprovalRequest::ACTION_CREATE,
+                        null,
+                        $validate,
+                        null,
+                        'Pengajuan create holiday calendar'
+                    );
                     return redirect()
                         ->route('basicdata.holidaycalendar.index')->with(
                             'success',
-                            'Holiday Calendar created successfully',
+                            'Pengajuan holiday calendar berhasil dikirim untuk approval.',
                         );
                 } catch (Exception $e) {
                     return redirect()
@@ -94,12 +105,19 @@
 
             if ($validate) {
                 try {
-                    $holiday = HolidayCalendar::find($id);
-                    $holiday->update($validate);
+                    $holiday = HolidayCalendar::findOrFail($id);
+                    $this->approvalService->createRequest(
+                        HolidayCalendar::class,
+                        ApprovalRequest::ACTION_UPDATE,
+                        (string) $holiday->id,
+                        $validate,
+                        $holiday->only(array_keys($validate)),
+                        'Pengajuan update holiday calendar'
+                    );
                     return redirect()
                         ->route('basicdata.holidaycalendar.index')->with(
                             'success',
-                            'Holiday Calendar updated successfully',
+                            'Pengajuan perubahan holiday calendar berhasil dikirim untuk approval.',
                         );
                 } catch (Exception $e) {
                     return redirect()
