@@ -36,7 +36,6 @@ Route::middleware(['auth'])->group(function () {
             ],
         ]);
 
-
         Route::name('branch.')->prefix('cabang')->group(function () {
             Route::get('datatables', [BranchController::class, 'dataForDatatables'])->name('datatables');
             Route::get('export', [BranchController::class, 'export'])->name('export');

@@ -133,20 +133,19 @@
         {
             // Check if the authenticated user has the required permission to delete holiday calendars
             if (is_null($this->user) || !$this->user->can('basic-data.delete')) {
-                abort(403, 'Sorry! You are not allowed to delete holiday calendars.');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sorry! You are not allowed to delete holiday calendars.'
+                ], 403);
             }
 
             try {
                 $holiday = HolidayCalendar::find($id);
                 $holiday->delete();
-                return redirect()
-                    ->route('basicdata.holidaycalendar.index')->with(
-                        'success',
-                        'Holiday Calendar deleted successfully',
-                    );
+
+                return response()->json(['success' => true, 'message' => 'Holiday Calendar deleted successfully']);
             } catch (Exception $e) {
-                return redirect()
-                    ->route('basicdata.holidaycalendar.index')->with('error', 'Failed to delete Holiday Calendar');
+                return response()->json(['success' => false, 'message' => 'Failed to delete Holiday Calendar']);
             }
         }
 

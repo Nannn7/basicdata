@@ -17,6 +17,10 @@ class BasicdataDatabaseSeeder extends Seeder
             UpdateBranchesIsDalamKotaSeeder::class,
             CurrencySeeder::class,
             HolidayCalendarSeeder::class,
+<<<<<<< HEAD
+            UpdateBranchesIsDalamKotaSeeder::class,
+=======
+>>>>>>> 21b5e6cf063a84a2704a95f493066a03b5376839
         ]);
     }
 }

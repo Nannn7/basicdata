@@ -1,62 +1,65 @@
 @extends('layouts.main')
 
 @section('breadcrumbs')
-    {{ Breadcrumbs::render('basicdata.holidaycalendar') }}
+    {{ Breadcrumbs::render('basicdata.developer') }}
 @endsection
 
 @section('content')
     <div class="grid">
-        <div class="card card-grid min-w-full" data-datatable="false" data-datatable-page-size="10" data-datatable-state-save="false" id="holiday-calendar-table" data-api-url="{{ route('basicdata.holidaycalendar.datatables') }}">
+        <div class="card card-grid min-w-full" data-datatable="false" data-datatable-page-size="10"
+            data-datatable-state-save="false" id="developer-table"
+            data-api-url="{{ route('basicdata.developer.datatables') }}">
             <div class="card-header py-5 flex-wrap">
                 <h3 class="card-title">
-                    Daftar Hari Libur
+                    Daftar Developer
                 </h3>
                 <div class="flex flex-wrap gap-2 lg:gap-5">
-                    <div class="flex">
+                    <div class="flex gap-2 lg:gap-5">
                         <label class="input input-sm"> <i class="ki-filled ki-magnifier"> </i>
-                            <input placeholder="Cari Hari Libur" id="search" type="text" value="">
+                            <input placeholder="Search Developer" id="search" type="text" value="">
                         </label>
                     </div>
-                    <div class="flex flex-wrap gap-2.5">
+                    <div class="flex flex-wrap gap-2 lg:gap-5">
                         <div class="h-[24px] border border-r-gray-200"></div>
                         @can('basic-data.export')
-                        <a id="export-btn" class="btn btn-sm btn-light" href="{{ route('basicdata.holidaycalendar.export') }}"> Export to Excel </a>
+                            <a id="export-btn" class="btn btn-sm btn-light" href="{{ route('basicdata.developer.export') }}">
+                                Export to Excel </a>
                         @endcan
                         @can('basic-data.create')
-                        <a class="btn btn-sm btn-primary" href="{{ route('basicdata.holidaycalendar.create') }}"> Tambah Hari Libur </a>
+                            <a class="btn btn-sm btn-primary" href="{{ route('basicdata.developer.create') }}"> Tambah Developer
+                            </a>
                         @endcan
                         @can('basic-data.delete')
-                        <button class="btn btn-sm btn-danger hidden" id="deleteSelected" onclick="deleteSelectedRows()">Delete Selected</button>
+                            <button class="btn btn-sm btn-danger hidden" id="deleteSelected"
+                                onclick="deleteSelectedRows()">Delete Selected</button>
                         @endcan
                     </div>
                 </div>
             </div>
             <div class="card-body">
                 <div class="scrollable-x-auto">
-                    <table class="table table-auto table-border align-middle text-gray-700 font-medium text-sm" data-datatable-table="true">
+                    <table class="table table-auto table-border align-middle text-gray-700 font-medium text-sm"
+                        data-datatable-table="true">
                         <thead>
-                        <tr>
-                            <th class="w-14">
-                                <input class="checkbox checkbox-sm" data-datatable-check="true" type="checkbox"/>
-                            </th>
-                            <th class="min-w-[150px]" data-datatable-column="date">
-                                <span class="sort"> <span class="sort-label"> Tanggal </span>
-                                    <span class="sort-icon"> </span> </span>
-                            </th>
-                            <th class="min-w-[250px]" data-datatable-column="description">
-                                <span class="sort"> <span class="sort-label"> Deskripsi </span>
-                                    <span class="sort-icon"> </span> </span>
-                            </th>
-                            <th class="min-w-[150px]" data-datatable-column="type">
-                                <span class="sort"> <span class="sort-label"> Tipe </span>
-                                    <span class="sort-icon"> </span> </span>
-                            </th>
-                            <th class="min-w-[50px] text-center" data-datatable-column="actions">Action</th>
-                        </tr>
+                            <tr>
+                                <th class="w-14">
+                                    <input class="checkbox checkbox-sm" data-datatable-check="true" type="checkbox" />
+                                </th>
+                                <th class="min-w-[250px]" data-datatable-column="code">
+                                    <span class="sort"> <span class="sort-label"> Code </span>
+                                        <span class="sort-icon"> </span> </span>
+                                </th>
+                                <th class="min-w-[250px]" data-datatable-column="name">
+                                    <span class="sort"> <span class="sort-label"> Name </span>
+                                        <span class="sort-icon"> </span> </span>
+                                </th>
+                                <th class="min-w-[50px] text-center" data-datatable-column="actions">Action</th>
+                            </tr>
                         </thead>
                     </table>
                 </div>
-                <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-3 text-gray-600 text-2sm font-medium">
+                <div
+                    class="card-footer justify-center md:justify-between flex-col md:flex-row gap-3 text-gray-600 text-2sm font-medium">
                     <div class="flex items-center gap-2">
                         Show
                         <select class="select select-sm w-16" data-datatable-size="true" name="perpage"> </select> per page
@@ -87,19 +90,19 @@
                 if (result.isConfirmed) {
                     $.ajaxSetup({
                         headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token()  }}'
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         }
                     });
 
-                    $.ajax(`basic-data/holidaycalendar/${data}`, {
+                    $.ajax(`basic-data/developer/${data}`, {
                         type: 'DELETE'
                     }).then((response) => {
-                        Swal.fire('Deleted!', 'Holiday has been deleted.', 'success').then(() => {
+                        swal.fire('Deleted!', 'Developer has been deleted.', 'success').then(() => {
                             window.location.reload();
                         });
                     }).catch((error) => {
                         console.error('Error:', error);
-                        Swal.fire('Error!', 'An error occurred while deleting the holiday.', 'error');
+                        Swal.fire('Error!', 'An error occurred while deleting the developer.', 'error');
                     });
                 }
             })
@@ -130,9 +133,11 @@
                         }
                     });
 
-                    $.ajax('{{ route("basicdata.holidaycalendar.deleteMultiple") }}', {
+                    $.ajax('{{ route('basicdata.developer.deleteMultiple') }}', {
                         type: 'POST',
-                        data: { ids: ids }
+                        data: {
+                            ids: ids
+                        }
                     }).then((response) => {
                         Swal.fire('Deleted!', 'Selected rows have been deleted.', 'success').then(() => {
                             window.location.reload();
@@ -145,8 +150,9 @@
             })
         }
     </script>
+
     <script type="module">
-        const element = document.querySelector('#holiday-calendar-table');
+        const element = document.querySelector('#developer-table');
         const searchInput = document.getElementById('search');
         const deleteSelectedButton = document.getElementById('deleteSelected');
         const exportBtn = document.getElementById('export-btn');
@@ -166,20 +172,11 @@
                         return checkbox.outerHTML.trim();
                     },
                 },
-                date: {
-                    title: 'Tanggal',
-                    render: (item, data) => {
-                        return window.formatTanggalIndonesia(data.date)
-                    },
+                code: {
+                    title: 'Code',
                 },
-                description: {
-                    title: 'Deskripsi',
-                },
-                type: {
-                    title: 'Tipe',
-                    render: (item, data) => {
-                        return `<span class="capitalize badge badge-sm badge-${data.type === 'national_holiday' ? 'primary' : 'info'}">${data.type.replace('_', ' ')}</span>`;
-                    },
+                name: {
+                    title: 'Name',
                 },
                 actions: {
                     title: 'Action',
@@ -187,13 +184,13 @@
                         let html = `<div class="flex flex-nowrap justify-center">`;
 
                         @can('basic-data.update')
-                        html += `<a class="btn btn-sm btn-icon btn-clear btn-info" href="basic-data/holidaycalendar/${data.id}/edit">
+                            html += `<a class="btn btn-sm btn-icon btn-clear btn-info" href="basic-data/developer/${data.id}/edit">
                                 <i class="ki-outline ki-notepad-edit"></i>
                             </a>`;
                         @endcan
 
                         @can('basic-data.delete')
-                        html += `<a onclick="deleteData(${data.id})" class="delete btn btn-sm btn-icon btn-clear btn-danger">
+                            html += `<a onclick="deleteData(${data.id})" class="delete btn btn-sm btn-icon btn-clear btn-danger">
                                 <i class="ki-outline ki-trash"></i>
                             </a>`;
                         @endcan
@@ -206,6 +203,17 @@
         };
 
         let dataTable = new KTDataTable(element, dataTableOptions);
+
+        // Function to apply all filters
+        function applyFilters() {
+            let filters = {};
+
+            if (searchInput.value) {
+                filters.search = searchInput.value;
+            }
+
+            dataTable.search(filters);
+        }
 
         // Update export URL with filters
         function updateExportUrl() {
@@ -221,12 +229,13 @@
         }
 
         // Custom search functionality
-        searchInput.addEventListener('input', function () {
-            const searchValue = this.value.trim();
+        searchInput.addEventListener('input', function() {
             dataTable.goPage(1);
-            dataTable.search(searchValue, true);
+            applyFilters();
+            updateExportUrl();
+        });
 
-            // Update export URL with search parameter
+        exportBtn.addEventListener('click', function() {
             updateExportUrl();
         });
 

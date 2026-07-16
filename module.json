@@ -21,7 +21,7 @@
                 "icon": "ki-filled ki-category text-lg text-primary",
                 "classes": "",
                 "attributes": [],
-                "permission": "",
+                "permission": "basic-data.read",
                 "roles": [
                     "administrator",
                     "admin siskon"
@@ -32,7 +32,7 @@
                         "path": "basicdata.branch",
                         "classes": "",
                         "attributes": [],
-                        "permission": "",
+                        "permission": "basic-data.read",
                         "roles": [
                             "administrator",
                             "admin siskon"
@@ -43,7 +43,7 @@
                         "path": "basicdata.currency",
                         "classes": "",
                         "attributes": [],
-                        "permission": "",
+                        "permission": "basic-data.read",
                         "roles": [
                             "administrator",
                             "admin siskon"
@@ -54,7 +54,40 @@
                         "path": "basicdata.holidaycalendar",
                         "classes": "",
                         "attributes": [],
-                        "permission": "",
+                        "permission": "basic-data.read",
+                        "roles": [
+                            "administrator",
+                            "admin siskon"
+                        ]
+                    },
+                    {
+                        "title": "Developer Kerjasama",
+                        "path": "basicdata.developer",
+                        "classes": "",
+                        "attributes": [],
+                        "permission": "basic-data.read",
+                        "roles": [
+                            "administrator",
+                            "admin siskon"
+                        ]
+                    },
+                    {
+                        "title": "Notaris",
+                        "path": "basicdata.notaris",
+                        "classes": "",
+                        "attributes": [],
+                        "permission": "basic-data.read",
+                        "roles": [
+                            "administrator",
+                            "admin siskon"
+                        ]
+                    },
+                    {
+                        "title": "Nama Dokumen",
+                        "path": "basicdata.master-nama-dokumen",
+                        "classes": "",
+                        "attributes": [],
+                        "permission": "basic-data.read",
                         "roles": [
                             "administrator",
                             "admin siskon"
