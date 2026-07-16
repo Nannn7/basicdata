@@ -40,15 +40,14 @@ class UpdateBranchesIsDalamKotaSeeder extends Seeder
         ];
 
         foreach ($newBranches as $branch) {
-            Branch::firstOrCreate(
+            Branch::updateOrCreate(
                 ['code' => $branch['code']],
                 [
                     'name' => $branch['name'],
                     'is_dalam_kota' => $branch['is_dalam_kota'],
+                    'status' => true,
                 ]
             );
         }
-
-        echo "Seeder update kolom is_dalam_kota + insert data baru selesai!\n";
     }
 }

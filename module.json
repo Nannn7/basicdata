@@ -14,85 +14,55 @@
     ],
     "menu": {
         "main": [],
-        "master": [{
-            "title": "Basic Data",
-            "path": "basicdata",
-            "icon": "ki-filled ki-category text-lg text-primary",
-            "classes": "",
-            "attributes": [],
-            "permission": "basic-data.read",
-            "roles": [
-                "administrator",
-                "admin"
-            ],
-            "sub": [{
-                    "title": "Cabang",
-                    "path": "basicdata.branch",
-                    "classes": "",
-                    "attributes": [],
-                    "permission": "basic-data.read",
-                    "roles": [
-                        "administrator",
-                        "admin"
-                    ]
-                },
-                {
-                    "title": "Mata Uang",
-                    "path": "basicdata.currency",
-                    "classes": "",
-                    "attributes": [],
-                    "permission": "basic-data.read",
-                    "roles": [
-                        "administrator",
-                        "admin"
-                    ]
-                },
-                {
-                    "title": "Hari Libur",
-                    "path": "basicdata.holidaycalendar",
-                    "classes": "",
-                    "attributes": [],
-                    "permission": "basic-data.read",
-                    "roles": [
-                        "administrator",
-                        "admin"
-                    ]
-                },
-                {
-                    "title": "Developer Kerjasama",
-                    "path": "basicdata.developer",
-                    "classes": "",
-                    "attributes": [],
-                    "permission": "basic-data.read",
-                    "roles": [
-                        "administrator",
-                        "admin"
-                    ]
-                },
-                {
-                    "title": "Notaris",
-                    "path": "basicdata.notaris",
-                    "classes": "",
-                    "attributes": [],
-                    "permission": "basic-data.read",
-                    "roles": [
-                        "administrator",
-                        "admin"
-                    ]
-                },
-                {
-                    "title": "Nama Dokumen",
-                    "path": "basicdata.master-nama-dokumen",
-                    "classes": "",
-                    "attributes": [],
-                    "permission": "basic-data.read",
-                    "roles": [
-                        "administrator",
-                        "admin"
-                    ]
-                }
-            ]
-        }],
+        "master": [
+            {
+                "title": "Basic Data",
+                "path": "basicdata",
+                "icon": "ki-filled ki-category text-lg text-primary",
+                "classes": "",
+                "attributes": [],
+                "permission": "",
+                "roles": [
+                    "administrator",
+                    "admin siskon"
+                ],
+                "sub": [
+                    {
+                        "title": "Cabang",
+                        "path": "basicdata.branch",
+                        "classes": "",
+                        "attributes": [],
+                        "permission": "",
+                        "roles": [
+                            "administrator",
+                            "admin siskon"
+                        ]
+                    },
+                    {
+                        "title": "Mata Uang",
+                        "path": "basicdata.currency",
+                        "classes": "",
+                        "attributes": [],
+                        "permission": "",
+                        "roles": [
+                            "administrator",
+                            "admin siskon"
+                        ]
+                    },
+                    {
+                        "title": "Hari Libur",
+                        "path": "basicdata.holidaycalendar",
+                        "classes": "",
+                        "attributes": [],
+                        "permission": "",
+                        "roles": [
+                            "administrator",
+                            "admin siskon"
+                        ]
+                    }
+                ]
+            }
+        ],
         "system": []
     }
 }

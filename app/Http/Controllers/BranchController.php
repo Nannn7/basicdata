@@ -34,7 +34,11 @@
                 abort(403, 'Sorry! You are not allowed to view branches.');
             }
 
-            return view('basicdata::branch.index');
+            $parentBranches = Branch::query()
+                ->orderBy('name')
+                ->get(['id', 'name']);
+
+            return view('basicdata::branch.index', compact('parentBranches'));
         }
 
         public function store(BranchRequest $request)
@@ -67,7 +71,9 @@
             if (is_null($this->user) || !$this->user->can('basic-data.create')) {
                 abort(403, 'Sorry! You are not allowed to create branches.');
             }
-            $branches = Branch::all();
+            $branches = Branch::query()
+                ->orderBy('name')
+                ->get(['id', 'name']);
             return view('basicdata::branch.create', compact('branches'));
         }
 
@@ -79,7 +85,10 @@
             }
 
             $branch   = Branch::findOrFail($id);
-            $branches = Branch::all();
+            $branches = Branch::query()
+                ->whereKeyNot($branch->id)
+                ->orderBy('name')
+                ->get(['id', 'name']);
             return view('basicdata::branch.create', compact('branch', 'branches'));
         }
 
@@ -186,13 +195,18 @@
             }
 
             // Retrieve data from the database
-            $query = Branch::query();
+            $query = Branch::query()
+                ->select(['id', 'code', 'name', 'parent_id', 'address'])
+                ->with('parent:id,name');
+            $baseCountQuery = Branch::query();
+            $searchPayload = $request->get('search');
+            $search = is_string($searchPayload)
+                ? json_decode($searchPayload, false)
+                : $searchPayload;
 
             // Apply search filter if provided
-            if ($request->has('search') && !empty($request->get('search'))) {
-                $search = json_decode($request->get('search'));
-
-                if(isset($search->search)) {
+            if (!empty($search)) {
+                if (isset($search->search) && !empty($search->search)) {
                     $search_ = strtolower($search->search);
                     $query->where(function ($q) use ($search_) {
                         $q->whereRaw('LOWER(code) LIKE ?', ['%' . strtolower($search_) . '%']);
@@ -213,28 +227,35 @@
 
             // Apply sorting if provided
             if ($request->has('sortOrder') && !empty($request->get('sortOrder'))) {
-                $order  = $request->get('sortOrder');
-                $column = $request->get('sortField');
+                $order  = strtolower((string) $request->get('sortOrder'));
+                $column = (string) $request->get('sortField');
+                $allowedSort = ['code', 'name', 'parent_id', 'address'];
+
+                if (!in_array($order, ['asc', 'desc'], true)) {
+                    $order = 'asc';
+                }
+
+                if (!in_array($column, $allowedSort, true)) {
+                    $column = 'name';
+                }
+
                 $query->orderBy($column, $order);
+            } else {
+                $query->orderBy('name');
             }
 
-            // Get the total count of records
-            $totalRecords = $query->count();
+            $isFiltered = !empty($search?->search) || !empty($search?->parent_id);
+            $totalRecords = $baseCountQuery->count();
+            $filteredRecords = $isFiltered ? (clone $query)->count() : $totalRecords;
+
+            $page = max((int) $request->get('page', 1), 1);
+            $size = max((int) $request->get('size', 10), 1);
 
             // Apply pagination if provided
-            if ($request->has('page') && $request->has('size')) {
-                $page   = $request->get('page');
-                $size   = $request->get('size');
-                $offset = ($page - 1) * $size; // Calculate the offset
-
-                $query->skip($offset)->take($size);
-            }
-
-            // Get the filtered count of records
-            $filteredRecords = $query->count();
-
             // Get the data for the current page
-            $data = $query->get();
+            $data = $query
+                ->forPage($page, $size)
+                ->get();
 
             $data = $data->map(function ($item) {
                 return [
@@ -247,10 +268,7 @@
             });
 
             // Calculate the page count
-            $pageCount = ceil($totalRecords / $request->get('size'));
-
-            // Calculate the current page number
-            $currentPage = $request->get('page') ?: 1;
+            $pageCount = (int) ceil($filteredRecords / max($size, 1));
 
 
             // Return the response data as a JSON object
@@ -259,7 +277,7 @@
                 'recordsTotal'    => $totalRecords,
                 'recordsFiltered' => $filteredRecords,
                 'pageCount'       => $pageCount,
-                'page'            => $currentPage,
+                'page'            => $page,
                 'totalCount'      => $totalRecords,
                 'data'            => $data,
             ]);

@@ -18,7 +18,7 @@
                         </label>
                         <select class="select select-sm" id="parent-filter" data-datatable-filter-column="parent_id">
                             <option value="">All Parent Branches</option>
-                            @foreach(\Modules\Basicdata\Models\Branch::orderBy('name')->get() as $branch)
+                            @foreach($parentBranches as $branch)
                                 <option value="{{ $branch->id }}">{{ $branch->name }}</option>
                             @endforeach
                         </select>
