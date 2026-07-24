@@ -139,14 +139,24 @@
                 ], 403);
             }
 
-            try {
-                $holiday = HolidayCalendar::find($id);
-                $holiday->delete();
+            $holiday = HolidayCalendar::findOrFail($id);
 
-                return response()->json(['success' => true, 'message' => 'Holiday Calendar deleted successfully']);
-            } catch (Exception $e) {
-                return response()->json(['success' => false, 'message' => 'Failed to delete Holiday Calendar']);
-            }
+            try {
+                $oldPayload = $holiday->only(['date', 'description', 'type']);
+
+                $this->approvalService->createRequest(
+                    HolidayCalendar::class,
+                    ApprovalRequest::ACTION_DELETE,
+                    (string) $holiday->id,
+                    [],
+                    $oldPayload,
+                    'Pengajuan delete holiday calendar: ' . $holiday->description
+                );
+
+                return response()->json(['success' => true, 'message' => 'Pengajuan hapus holiday calendar berhasil dikirim untuk approval.']);
+             } catch (Exception $e) {
+                return response()->json(['success' => false, 'message' => 'Failed to submit delete request.']);
+             }
         }
 
         public function deleteMultiple(Request $request)
@@ -160,8 +170,26 @@
             }
 
             $ids = $request->input('ids');
-            HolidayCalendar::whereIn('id', $ids)->delete();
-            return response()->json(['success' => true, 'message' => 'Holidays deleted successfully']);
+            $holidays = HolidayCalendar::whereIn('id', $ids)->get();
+
+            try {
+                foreach ($holidays as $holiday) {
+                    $oldPayload = $holiday->only(['date', 'description', 'type']);
+
+                    $this->approvalService->createRequest(
+                        HolidayCalendar::class,
+                        ApprovalRequest::ACTION_DELETE,
+                        (string) $holiday->id,
+                        [],
+                        $oldPayload,
+                        'Pengajuan delete holiday calendar: ' . $holiday->description
+                    );
+                }
+
+                return response()->json(['success' => true, 'message' => 'Pengajuan hapus holiday calendar berhasil dikirim untuk approval.']);
+            } catch (Exception $e) {
+                return response()->json(['success' => false, 'message' => 'Failed to submit delete request.']);
+            }
         }
 
         public function dataForDatatables(Request $request)
