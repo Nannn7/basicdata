@@ -153,20 +153,30 @@
 
             try {
                 // Find the branch
-                $branch = Branch::find($id);
+                $branch = Branch::findOrFail($id);
 
-                // Check if the branch has children
-                if ($branch->children()->exists()) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Cabang dengan anak cabang tidak dapat dihapus.'
-                    ], 422);
+                try {
+                    if ($branch->children()->exists()) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Cabang dengan anak cabang tidak dapat dihapus.'
+                        ], 422);
+                    }
+
+                    $oldPayload = $branch->only(['code', 'name', 'parent_id', 'address']);
+                    $this->approvalService->createRequest(
+                        Branch::class,
+                        ApprovalRequest::ACTION_DELETE,
+                        (string) $branch->id,
+                        [],
+                        $oldPayload,
+                        'Pengajuan delete branch: ' . $branch->name
+                    );
+                
+                    return response()->json(['success' => true, 'message' => 'Pengajuan hapus branch berhasil dikirim untuk approval.']);
+                } catch (Exception $e) {
+                    return response()->json(['success' => false, 'message' => 'Failed to submit delete request.']);
                 }
-
-                // Delete from database
-                $branch->delete();
-
-                return response()->json(['success' => true, 'message' => 'Branch deleted successfully']);
             } catch (Exception $e) {
                 return response()->json(['success' => false, 'message' => 'Failed to delete branch']);
             }
@@ -196,8 +206,23 @@
                 ], 422);
             }
 
-            Branch::whereIn('id', $ids)->delete();
-            return response()->json(['success' => true, 'message' => 'Branches deleted successfully']);
+            $branches = Branch::whereIn('id', $ids)->get();
+            try {
+                foreach ($branches as $branch) {
+                    $this->approvalService->createRequest(
+                        Branch::class,
+                        ApprovalRequest::ACTION_DELETE,
+                        (string) $branch->id,
+                        [],
+                        $branch->only(['code', 'name', 'parent_id', 'address']),
+                        'Pengajuan delete branch: ' . $branch->name
+                    );
+                }
+
+                return response()->json(['success' => true, 'message' => 'Pengajuan hapus branches berhasil dikirim untuk approval.']);
+            } catch (Exception $e) {
+                return response()->json(['success' => false, 'message' => 'Failed to submit delete request.']);
+            }
         }
 
         public function dataForDatatables(Request $request)

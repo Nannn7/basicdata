@@ -130,14 +130,24 @@
                 return response()->json(['success' => false, 'message' => 'Sorry! You are not allowed to delete currencies.'], 403);
             }
 
+            $currency = Currency::findOrFail($id);
+            
             try {
                 // Delete from database
-                $currency = Currency::find($id);
-                $currency->delete();
+                $oldPayload = $currency->only(['code', 'symbol', 'name', 'decimal_places']);
 
-                return response()->json(['success' => true, 'message' => 'Currency deleted successfully']);
+                $this->approvalService->createRequest(
+                    Currency::class,
+                    ApprovalRequest::ACTION_DELETE,
+                    (string) $currency->id,
+                    [],
+                    $oldPayload,
+                    'Pengajuan delete currency: ' . $currency->code
+                );
+
+                return response()->json(['success' => true, 'message' => 'Pengajuan hapus currency berhasil dikirim untuk approval.']);
             } catch (Exception $e) {
-                return response()->json(['success' => false, 'message' => 'Failed to delete currency']);
+                return response()->json(['success' => false, 'message' => 'Failed to submit delete request.']);
             }
         }
 
@@ -149,8 +159,24 @@
             }
 
             $ids = $request->input('ids');
-            Currency::whereIn('id', $ids)->delete();
-            return response()->json(['success' => true, 'message' => 'Currencies deleted successfully']);
+            $currencies = Currency::whereIn('id', $ids)->get();
+
+            try {
+                foreach ($currencies as $currency) {
+                    $this->approvalService->createRequest(
+                        Currency::class,
+                        ApprovalRequest::ACTION_DELETE,
+                        (string) $currency->id,
+                        [],
+                        $currency->only(['code', 'symbol', 'name', 'decimal_places']),
+                        'Pengajuan delete currency: ' . $currency->code
+                    );
+                }
+
+                return response()->json(['success' => true, 'message' => 'Pengajuan hapus currency berhasil dikirim untuk approval.']);
+            } catch (Exception $e) {
+                return response()->json(['success' => false, 'message' => 'Failed to submit delete request.']);
+            }
         }
 
         public function dataForDatatables(Request $request)
