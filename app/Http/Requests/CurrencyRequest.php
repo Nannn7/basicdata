@@ -24,9 +24,9 @@
 
             if ($this->method() == 'PUT') {
                 $id = $this->id ? (int)$this->id : null;
-                $rules['code'] = 'required|string|max:3|unique:currencies,code,' . $id;
+                $rules['code'] = ['required', 'string', 'max:3', \Illuminate\Validation\Rule::unique('currencies', 'code')->ignore($id)->whereNull('deleted_at')];
             } else {
-                $rules['code'] = 'required|string|max:3|unique:currencies,code';
+                $rules['code'] = ['required', 'string', 'max:3', \Illuminate\Validation\Rule::unique('currencies', 'code')->whereNull('deleted_at')];
             }
 
             return $rules;
